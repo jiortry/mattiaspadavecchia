@@ -70,7 +70,9 @@ const BackgroundPhotoPlaceholders = () => {
         document.documentElement.scrollHeight,
         document.body.scrollHeight
       );
-      setContainerHeight(h);
+      const isMobile = (typeof window !== "undefined" ? window.innerWidth : width) < 640;
+      // extend layer on mobile to push images further down and increase spacing
+      setContainerHeight(isMobile ? Math.round(h * 1.35) : h);
     };
     computeHeight();
 
@@ -93,7 +95,8 @@ const BackgroundPhotoPlaceholders = () => {
           document.documentElement.scrollHeight,
           document.body.scrollHeight
         );
-        setContainerHeight(h);
+        const isMobileNow = w < 640;
+        setContainerHeight(isMobileNow ? Math.round(h * 1.35) : h);
       }, 0);
     };
     window.addEventListener("resize", onResize);
@@ -103,7 +106,8 @@ const BackgroundPhotoPlaceholders = () => {
         document.documentElement.scrollHeight,
         document.body.scrollHeight
       );
-      setContainerHeight(h);
+      const isMobileNow = (typeof window !== "undefined" ? window.innerWidth : width) < 640;
+      setContainerHeight(isMobileNow ? Math.round(h * 1.35) : h);
     });
     try {
       ro.observe(document.body);
@@ -121,7 +125,7 @@ const BackgroundPhotoPlaceholders = () => {
         const src = imagePaths[slot.id] || "";
         const isHidden = hidden[slot.id];
         const isMobile = viewportWidth < 640;
-        // Distribute vertically across full layer on mobile using percentage positions
+        // Distribute vertically across the extended layer on mobile using percentage positions
         const topValue = isMobile ? `${((slot.id + 0.5) / 7) * 100}%` : `${slot.top}vh`;
         return (
           <div
