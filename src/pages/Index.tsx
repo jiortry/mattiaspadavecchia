@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Instagram } from "lucide-react";
 import PanettonCard from "@/components/PanettonCard";
 import PanettonDialog from "@/components/PanettonDialog";
+import SnowEffect from "@/components/SnowEffect";
 import { Button } from "@/components/ui/button";
 
 interface Panettone {
@@ -90,6 +91,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+      <SnowEffect />
       {/* Hero Section */}
       <header className="container mx-auto px-4 py-16 md:py-24">
         <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
