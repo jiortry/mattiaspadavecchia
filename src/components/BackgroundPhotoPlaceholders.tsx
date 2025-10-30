@@ -170,9 +170,9 @@ const BackgroundPhotoPlaceholders = () => {
               alt=""
               className="w-full h-full object-cover"
               style={{
-                // Feathered edges to avoid visible borders/rectangles
-                WebkitMaskImage: "radial-gradient(100% 100% at 50% 50%, black 70%, transparent 100%)",
-                maskImage: "radial-gradient(100% 100% at 50% 50%, black 70%, transparent 100%)",
+                opacity: 0.9,
+                WebkitMaskImage: "radial-gradient(110% 110% at 50% 50%, black 70%, transparent 100%)",
+                maskImage: "radial-gradient(110% 110% at 50% 50%, black 70%, transparent 100%)",
               }}
               onError={() => setHidden((h) => ({ ...h, [slot.id]: true }))}
               loading="lazy"
