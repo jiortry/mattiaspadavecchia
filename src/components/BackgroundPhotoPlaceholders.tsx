@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 type Slot = {
   id: number;
-  top: number; // in vh can be negative or >100
+  top: number; // percentage of page height (0-100, can be slightly <0 or >100)
   left: number; // in vw can be negative or >100
   rotate: number; // deg
   vw: number; // preferred width in vw for responsiveness
@@ -59,10 +59,13 @@ const imagePaths: string[] = Array.from({ length: 7 }, (_, i) => `/panettoni${i 
 const BackgroundPhotoPlaceholders = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [hidden, setHidden] = useState<Record<number, boolean>>({});
+  const [pageHeight, setPageHeight] = useState<number>(0);
 
   useEffect(() => {
     const width = typeof window !== "undefined" ? window.innerWidth : 1280;
+    const height = typeof document !== "undefined" ? document.documentElement.scrollHeight : 0;
     setSlots(chooseFixedSlots(width));
+    setPageHeight(height);
 
     // Update layout only when crossing breakpoints; avoid jitter on minor resizes
     const onResize = () => {
@@ -76,15 +79,27 @@ const BackgroundPhotoPlaceholders = () => {
       if (prevLabel !== currLabel) {
         setSlots(current);
       }
+      // Update page height on resize
+      setPageHeight(document.documentElement.scrollHeight);
     };
     window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    
+    // Observe DOM changes to keep page height in sync
+    const observer = new MutationObserver(() => {
+      setPageHeight(document.documentElement.scrollHeight);
+    });
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true, characterData: true });
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      observer.disconnect();
+    };
   }, []);
 
   return (
     <div
-      className="pointer-events-none fixed inset-0"
-      style={{ zIndex: 1 }}
+      className="pointer-events-none absolute w-full"
+      style={{ zIndex: 1, top: 0, height: pageHeight ? `${pageHeight}px` : undefined }}
       aria-hidden
     >
       {slots.map((slot) => {
@@ -95,7 +110,7 @@ const BackgroundPhotoPlaceholders = () => {
             key={slot.id}
             className="absolute"
             style={{
-              top: `${slot.top}vh`,
+              top: pageHeight ? `${(slot.top / 100) * pageHeight}px` : `${slot.top}vh`,
               left: `${slot.left}vw`,
               width: `clamp(260px, ${slot.vw}vw, 720px)`,
               aspectRatio: `${slot.ratio}`,
