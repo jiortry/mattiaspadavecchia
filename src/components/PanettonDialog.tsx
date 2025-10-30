@@ -35,7 +35,7 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px] bg-card border-border/50">
+      <DialogContent className="w-[92vw] sm:max-w-[560px] md:max-w-[640px] max-h-[88vh] md:max-h-[90vh] overflow-y-auto bg-card border-border/50 p-6 md:p-8 rounded-xl">
         <DialogHeader className="space-y-4">
           <DialogTitle className="text-3xl font-elegant text-foreground">
             {panettone.name}
@@ -44,7 +44,7 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
             {panettone.description}
           </DialogDescription>
         </DialogHeader>
-        <div className="mt-6 space-y-4">
+        <div className="mt-6 space-y-6">
           <div>
             <h4 className="text-lg font-elegant font-semibold text-foreground mb-3">
               Ingredienti
