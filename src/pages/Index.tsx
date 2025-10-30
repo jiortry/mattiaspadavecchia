@@ -254,7 +254,7 @@ const Index = () => {
       </main>
 
       {/* Instagram Contact */}
-      <footer className="container mx-auto px-4 py-16 md:py-20">
+      <footer className="container mx-auto px-4 py-16 md:py-20 hidden sm:block">
         <div className="max-w-2xl mx-auto text-center space-y-8">
           <div className="space-y-4">
             <h2
