@@ -87,6 +87,8 @@ const SnowEffect = () => {
 
     // Gentle generation and animation with collision and settling only on bg photos
     const maxFlakes = 60;
+    const maxSettledPerAnchor = 24; // keep only most recent per photo
+    const maxSettledTotal = 160; // global guard
 
     const loop = () => {
       // spawn a new flake occasionally, capped
@@ -96,6 +98,12 @@ const SnowEffect = () => {
           .filter((f) => now - f.createdAt < 30000 && f.y < window.innerHeight + 40);
         if (next.length < maxFlakes && Math.random() < 0.35) {
           next = [...next, createSnowflake()];
+        }
+        // hard trim oldest if we exceed cap
+        if (next.length > maxFlakes) {
+          next = next
+            .sort((a, b) => a.createdAt - b.createdAt)
+            .slice(next.length - maxFlakes);
         }
         return next;
       });
@@ -148,26 +156,53 @@ const SnowEffect = () => {
 
         if (newSettled.length) {
           setSettled((prevS) => {
-            const merged = [...prevS, ...newSettled];
-            // softly cap per anchor to avoid invasiveness
-            const counts = new Map<string, number>();
-            const pruned: SettledFlake[] = [];
+            const now2 = Date.now();
+            // keep only alive before merging
+            const alive = prevS.filter((s) => now2 - s.createdAt < s.lifespanMs);
+            const merged = [...alive, ...newSettled];
+            // group by anchor and keep MOST RECENT maxSettledPerAnchor
+            const byAnchor = new Map<string, SettledFlake[]>();
             for (const s of merged) {
-              const c = counts.get(s.anchorKey) || 0;
-              if (c < 28) {
-                pruned.push(s);
-                counts.set(s.anchorKey, c + 1);
-              }
+              const arr = byAnchor.get(s.anchorKey) || [];
+              arr.push(s);
+              byAnchor.set(s.anchorKey, arr);
             }
-            return pruned.filter((s) => Date.now() - s.createdAt < s.lifespanMs);
+            const cappedPerAnchor: SettledFlake[] = [];
+            for (const [_, arr] of byAnchor) {
+              arr.sort((a, b) => b.createdAt - a.createdAt);
+              cappedPerAnchor.push(...arr.slice(0, maxSettledPerAnchor));
+            }
+            // apply global cap, keeping most recent globally
+            const globallyCapped = cappedPerAnchor
+              .sort((a, b) => b.createdAt - a.createdAt)
+              .slice(0, maxSettledTotal);
+            return globallyCapped;
           });
         }
 
         return updated;
       });
 
-      // fade out settled over time
-      setSettled((prev) => prev.filter((s) => Date.now() - s.createdAt < s.lifespanMs));
+      // fade out settled over time and enforce caps even when no new settles
+      setSettled((prev) => {
+        const now2 = Date.now();
+        const alive = prev.filter((s) => now2 - s.createdAt < s.lifespanMs);
+        // regroup and cap
+        const byAnchor = new Map<string, SettledFlake[]>();
+        for (const s of alive) {
+          const arr = byAnchor.get(s.anchorKey) || [];
+          arr.push(s);
+          byAnchor.set(s.anchorKey, arr);
+        }
+        const cappedPerAnchor: SettledFlake[] = [];
+        for (const [_, arr] of byAnchor) {
+          arr.sort((a, b) => b.createdAt - a.createdAt);
+          cappedPerAnchor.push(...arr.slice(0, maxSettledPerAnchor));
+        }
+        return cappedPerAnchor
+          .sort((a, b) => b.createdAt - a.createdAt)
+          .slice(0, maxSettledTotal);
+      });
 
       rafIdRef.current = window.requestAnimationFrame(loop);
     };
