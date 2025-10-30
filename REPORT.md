@@ -1,1 +1,2 @@
 Aggiornamento completato
+Ottimizzato
