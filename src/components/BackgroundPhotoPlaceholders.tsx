@@ -71,8 +71,8 @@ const BackgroundPhotoPlaceholders = () => {
         document.body.scrollHeight
       );
       const isMobile = (typeof window !== "undefined" ? window.innerWidth : width) < 640;
-      // extend layer on mobile to push images further down and increase spacing
-      setContainerHeight(isMobile ? Math.round(h * 1.35) : h);
+      // extend layer on mobile further to push images lower and create more spacing
+      setContainerHeight(isMobile ? Math.round(h * 1.8) : h);
     };
     computeHeight();
 
@@ -96,7 +96,7 @@ const BackgroundPhotoPlaceholders = () => {
           document.body.scrollHeight
         );
         const isMobileNow = w < 640;
-        setContainerHeight(isMobileNow ? Math.round(h * 1.35) : h);
+        setContainerHeight(isMobileNow ? Math.round(h * 1.8) : h);
       }, 0);
     };
     window.addEventListener("resize", onResize);
@@ -107,7 +107,7 @@ const BackgroundPhotoPlaceholders = () => {
         document.body.scrollHeight
       );
       const isMobileNow = (typeof window !== "undefined" ? window.innerWidth : width) < 640;
-      setContainerHeight(isMobileNow ? Math.round(h * 1.35) : h);
+      setContainerHeight(isMobileNow ? Math.round(h * 1.8) : h);
     });
     try {
       ro.observe(document.body);
@@ -125,8 +125,10 @@ const BackgroundPhotoPlaceholders = () => {
         const src = imagePaths[slot.id] || "";
         const isHidden = hidden[slot.id];
         const isMobile = viewportWidth < 640;
-        // Distribute vertically across the extended layer on mobile using percentage positions
-        const topValue = isMobile ? `${((slot.id + 0.5) / 7) * 100}%` : `${slot.top}vh`;
+        // Distribute vertically across the extended layer on mobile using eased percentage positions
+        // Easing shifts more space toward the bottom to reduce crowding at the top
+        const frac = Math.pow((slot.id + 1) / 7.5, 1.25);
+        const topValue = isMobile ? `${Math.min(100, Math.max(0, frac * 100))}%` : `${slot.top}vh`;
         return (
           <div
             key={slot.id}
