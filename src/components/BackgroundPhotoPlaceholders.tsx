@@ -128,7 +128,9 @@ const BackgroundPhotoPlaceholders = () => {
         // Distribute vertically across the extended layer on mobile using eased percentage positions
         // Easing shifts more space toward the bottom to reduce crowding at the top
         const frac = Math.pow((slot.id + 1) / 7.5, 1.25);
-        const topValue = isMobile ? `${Math.min(100, Math.max(0, frac * 100))}%` : `${slot.top}vh`;
+        const percent = Math.min(100, Math.max(0, frac * 100));
+        // Add a 100px downward offset only on mobile
+        const topValue = isMobile ? `calc(${percent}% + 100px)` : `${slot.top}vh`;
         return (
           <div
             key={slot.id}
