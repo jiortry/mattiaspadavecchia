@@ -43,6 +43,13 @@ const Snowfall = () => {
     resize();
     window.addEventListener("resize", resize);
 
+    const onScroll = () => {
+      if (flakesRef.current.length) {
+        flakesRef.current = flakesRef.current.filter((f) => !f.hasLanded);
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     const maxFlakes = 140; // light effect
     const spawnIntervalMs = 120; // spawn cadence
     const gravity = 0.03; // gentle
@@ -160,6 +167,7 @@ const Snowfall = () => {
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("scroll", onScroll as EventListener);
       flakesRef.current = [];
       try {
         document.body.removeChild(canvas);
