@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 type Slot = {
   id: number;
@@ -31,8 +31,11 @@ const generateSlots = (count = 8): Slot[] => {
   return slots;
 };
 
+const imagePaths: string[] = Array.from({ length: 8 }, (_, i) => `/bg-${i + 1}.png`);
+
 const BackgroundPhotoPlaceholders = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
+  const [hidden, setHidden] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     setSlots(generateSlots(8));
@@ -41,25 +44,35 @@ const BackgroundPhotoPlaceholders = () => {
   return (
     <div
       className="pointer-events-none fixed inset-0"
-      style={{ zIndex: -1 }}
+      style={{ zIndex: 1 }}
       aria-hidden
     >
-      {slots.map((slot) => (
-        <div
-          key={slot.id}
-          className="absolute rounded-xl border border-white/15 bg-white/5 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] backdrop-blur-[2px]"
-          style={{
-            top: `${slot.top}vh`,
-            left: `${slot.left}vw`,
-            // Large but gently responsive: min 260px, prefer vw, cap at 720px
-            width: `clamp(260px, ${slot.vw}vw, 720px)`,
-            aspectRatio: `${slot.ratio}`,
-            transform: `rotate(${slot.rotate}deg) skewX(${slot.tilt}deg)`,
-          }}
-        >
-          <div className="w-full h-full bg-gradient-to-br from-white/8 to-white/3" />
-        </div>
-      ))}
+      {slots.map((slot) => {
+        const src = imagePaths[slot.id] || "";
+        const isHidden = hidden[slot.id];
+        return (
+          <div
+            key={slot.id}
+            className="absolute"
+            style={{
+              top: `${slot.top}vh`,
+              left: `${slot.left}vw`,
+              width: `clamp(260px, ${slot.vw}vw, 720px)`,
+              aspectRatio: `${slot.ratio}`,
+              transform: `rotate(${slot.rotate}deg) skewX(${slot.tilt}deg)`,
+              display: isHidden ? "none" : "block",
+            }}
+          >
+            <img
+              src={src}
+              alt=""
+              className="w-full h-full object-cover rounded-xl shadow-[0_20px_70px_-20px_rgba(0,0,0,0.45)] border border-white/10"
+              onError={() => setHidden((h) => ({ ...h, [slot.id]: true }))}
+              loading="lazy"
+            />
+          </div>
+        );
+      })}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Snowfall from "./components/Snowfall";
+import BackgroundPhotoPlaceholders from "./components/BackgroundPhotoPlaceholders";
 
 const queryClient = new QueryClient();
 
@@ -15,6 +16,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <Snowfall />
+      <BackgroundPhotoPlaceholders />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
