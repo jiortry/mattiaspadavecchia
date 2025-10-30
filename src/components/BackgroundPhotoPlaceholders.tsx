@@ -54,14 +54,17 @@ const imagePaths: string[] = Array.from({ length: 7 }, (_, i) => `/panettoni${i 
 const BackgroundPhotoPlaceholders = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
   const lockedMobileRef = useRef<boolean>(false);
+  const initialViewportRef = useRef<{ width: number; height: number }>({ width: 1280, height: 800 });
   const [hidden, setHidden] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     const width = typeof window !== "undefined" ? window.innerWidth : 1280;
+    const height = typeof window !== "undefined" ? window.innerHeight : 800;
     const label = (x: number) => (x < 640 ? "m" : x < 1024 ? "t" : "d");
     const initialLabel = label(width);
     // Lock mobile layout for the whole session so images never move on mobile
     lockedMobileRef.current = initialLabel === "m";
+    initialViewportRef.current = { width, height };
     setSlots(chooseFixedSlots(width));
 
     const onResize = () => {
@@ -88,18 +91,38 @@ const BackgroundPhotoPlaceholders = () => {
       {slots.map((slot) => {
         const src = imagePaths[slot.id] || "";
         const isHidden = hidden[slot.id];
-        return (
-          <div
-            key={slot.id}
-            className="absolute"
-            style={{
+
+        // On mobile, use fixed pixel positions/sizes based on initial viewport to avoid any movement during scroll
+        const isLockedMobile = lockedMobileRef.current;
+        const { width: iw, height: ih } = initialViewportRef.current;
+        const widthPx = (slot.vw / 100) * iw;
+        const heightPx = widthPx / slot.ratio;
+        const topPx = (slot.top / 100) * ih;
+        const leftPx = (slot.left / 100) * iw;
+
+        const containerStyle = isLockedMobile
+          ? {
+              top: `${Math.round(topPx)}px`,
+              left: `${Math.round(leftPx)}px`,
+              width: `${Math.round(widthPx)}px`,
+              aspectRatio: `${slot.ratio}`,
+              transform: `rotate(${slot.rotate}deg) skewX(${slot.tilt}deg)`,
+              display: isHidden ? "none" : "block",
+            }
+          : {
               top: `${slot.top}vh`,
               left: `${slot.left}vw`,
               width: `clamp(260px, ${slot.vw}vw, 720px)`,
               aspectRatio: `${slot.ratio}`,
               transform: `rotate(${slot.rotate}deg) skewX(${slot.tilt}deg)`,
               display: isHidden ? "none" : "block",
-            }}
+            };
+
+        return (
+          <div
+            key={slot.id}
+            className="absolute"
+            style={containerStyle as React.CSSProperties}
           >
             <img
               src={src}
