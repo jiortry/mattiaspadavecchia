@@ -23,7 +23,7 @@ const SnowEffect = () => {
         x: Math.random() * window.innerWidth,
         y: -20,
         size: Math.random() * 4 + 2,
-        opacity: Math.random() * 0.4 + 0.3,
+        opacity: Math.random() * 0.3 + 0.7,
         speed: Math.random() * 1 + 0.5,
         drift: Math.random() * 2 - 1,
         rotation: Math.random() * 360,
@@ -92,9 +92,9 @@ const SnowEffect = () => {
           <svg
             viewBox="0 0 24 24"
             fill="none"
-            className="text-primary/60"
+            className="text-white"
             style={{
-              filter: "drop-shadow(0 0 2px rgba(255, 255, 255, 0.8))",
+              filter: "drop-shadow(0 0 3px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 6px rgba(255,255,255,0.4))",
             }}
           >
             <path
