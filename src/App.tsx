@@ -17,8 +17,6 @@ const App = () => (
       <Sonner />
       <Snowfall />
       <BackgroundPhotoPlaceholders />
-      {/* Semi-opaque scrim between background images and content for readability */}
-      <div className="pointer-events-none fixed inset-0 z-[5] bg-black/35" aria-hidden />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />

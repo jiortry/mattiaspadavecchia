@@ -168,7 +168,12 @@ const BackgroundPhotoPlaceholders = () => {
             <img
               src={src}
               alt=""
-              className="w-full h-full object-cover rounded-xl shadow-[0_20px_70px_-20px_rgba(0,0,0,0.45)] border border-white/10"
+              className="w-full h-full object-cover"
+              style={{
+                // Feathered edges to avoid visible borders/rectangles
+                WebkitMaskImage: "radial-gradient(100% 100% at 50% 50%, black 70%, transparent 100%)",
+                maskImage: "radial-gradient(100% 100% at 50% 50%, black 70%, transparent 100%)",
+              }}
               onError={() => setHidden((h) => ({ ...h, [slot.id]: true }))}
               loading="lazy"
             />
