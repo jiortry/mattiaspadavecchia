@@ -36,13 +36,28 @@ const SnowEffect = () => {
 
   const updateAnchors = () => {
     const map = new Map<string, AnchorInfo>();
-    const nodes = Array.from(document.querySelectorAll('[data-snow-anchor]'));
+    const nodes = Array.from(
+      document.querySelectorAll(
+        [
+          '[data-snow-anchor]',
+          'h1, h2, h3, p',
+          'button, a',
+          '[class*="card" i]',
+          'header, footer',
+        ].join(', ')
+      )
+    );
     nodes.forEach((el) => {
       const type = el.getAttribute('data-snow-anchor') as "panettone" | "instagram" | null;
-      if (!type) return;
       const id = el.getAttribute('data-snow-id') || undefined;
-      const key = id ? `${type}:${id}` : `${type}`;
-      map.set(key, { el, type, id });
+      // derive a type if not provided
+      let derived: AnchorInfo['type'] = type || 'panettone';
+      if (!type) {
+        if (el.tagName.toLowerCase() === 'a' || el.tagName.toLowerCase() === 'button') derived = 'instagram';
+        else derived = 'panettone';
+      }
+      const key = id ? `${derived}:${id}` : `${derived}:${nodes.indexOf(el)}`;
+      map.set(key, { el, type: derived, id });
     });
     anchorsRef.current = map;
   };
@@ -78,15 +93,14 @@ const SnowEffect = () => {
     };
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    // Genera fiocchi periodicamente
+    // Genera fiocchi decorativi periodicamente (no caduta)
     const intervalId = setInterval(() => {
       setSnowflakes((prev) => {
-        // Rimuovi fiocchi vecchi (più di 15 secondi) o fuori schermo
+        // Rimuovi fiocchi vecchi (più di 20 secondi)
         const now = Date.now();
         const filtered = prev.filter(
           (flake) =>
-            flake.y < window.innerHeight + 100 &&
-            now - flake.createdAt < 15000
+            now - flake.createdAt < 20000
         );
         
         // Aggiungi nuovi fiocchi se ce ne sono pochi
@@ -95,77 +109,46 @@ const SnowEffect = () => {
         }
         return filtered;
       });
-    }, 200);
-
-    // Anima i fiocchi
-    const animationId = setInterval(() => {
-      setSnowflakes((prev) => {
-        const next: Snowflake[] = [];
-        const toSettle: SettledFlake[] = [];
-        const anchors = anchorsRef.current;
-        prev.forEach((flake) => {
-          // movimento
-          const newY = flake.y + flake.speed;
-          const newX = flake.x + Math.sin(flake.y * 0.01) * flake.drift;
-          const newRot = flake.rotation + 1;
-          let flakeUpdated: Snowflake = {
-            ...flake,
-            y: newY,
-            x: newX,
-            rotation: newRot,
-            opacity:
-              Date.now() - flake.createdAt > 12000
-                ? Math.max(0, flake.opacity - 0.02)
-                : flake.opacity,
-          };
-
-          // collisione con anchors (solo layer front per effetto premium)
-          if (flake.layer === 2 && anchors.size > 0) {
-            for (const [key, info] of anchors.entries()) {
+      // Accumulo leggero: aggiungi sporadicamente sui vari anchor
+      const anchors = anchorsRef.current;
+      if (anchors.size > 0) {
+        const now = Date.now();
+        setSettled((prevSet) => {
+          const updated = [...prevSet];
+          for (const [key, info] of anchors.entries()) {
+            const existingForAnchor = updated.filter((s) => s.anchorKey === key);
+            const limit = info.type === 'instagram' ? 14 : 28;
+            const chance = info.type === 'instagram' ? 0.08 : 0.05;
+            if (existingForAnchor.length < limit && Math.random() < chance) {
               const rect = (info.el as HTMLElement).getBoundingClientRect();
-              const withinX = flakeUpdated.x >= rect.left && flakeUpdated.x <= rect.right;
-              const hittingTop = flakeUpdated.y + flakeUpdated.size >= rect.top - 2 && flakeUpdated.y + flakeUpdated.size <= rect.top + 6;
-              if (withinX && hittingTop) {
-                // deposita un piccolo fiocco sulla sommità
-                toSettle.push({
-                  id: flakeUpdated.id,
-                  anchorKey: key,
-                  localX: flakeUpdated.x - rect.left,
-                  size: Math.max(1.5, Math.min(3.5, flakeUpdated.size * 0.9)),
-                  createdAt: Date.now(),
-                  lifespanMs: info.type === 'instagram' ? 12000 : 20000,
-                });
-                return; // non tenere questo fiocco in caduta
-              }
+              const localX = Math.max(0, Math.min(rect.width, Math.random() * rect.width));
+              updated.push({
+                id: Math.random(),
+                anchorKey: key,
+                localX,
+                size: Math.max(2, Math.random() * 3.5 + 1.5),
+                createdAt: now,
+                lifespanMs: info.type === 'instagram' ? 12000 : 22000,
+              });
             }
           }
-
-          next.push(flakeUpdated);
+          return updated;
         });
+      }
+    }, 200);
 
-        if (toSettle.length > 0) {
-          setSettled((prevSet) => {
-            // limita accumulo per anchor
-            const combined = [...prevSet, ...toSettle];
-            const byAnchor = new Map<string, SettledFlake[]>();
-            combined.forEach((f) => {
-              const list = byAnchor.get(f.anchorKey) || [];
-              list.push(f);
-              byAnchor.set(f.anchorKey, list);
-            });
-            const trimmed: SettledFlake[] = [];
-            byAnchor.forEach((list) => {
-              // rimuovi più vecchi oltre un limite
-              const limit = 24;
-              const sorted = list.sort((a, b) => a.createdAt - b.createdAt);
-              const slice = sorted.slice(Math.max(0, sorted.length - limit));
-              trimmed.push(...slice);
-            });
-            return trimmed;
-          });
-        }
-
-        return next;
+    // Anima i fiocchi (solo rotazione/jitter; posizione legata allo scroll)
+    const animationId = setInterval(() => {
+      setSnowflakes((prev) => {
+        return prev.map((flake) => ({
+          ...flake,
+          x: flake.x + Math.sin((flake.y + scrollYRef.current) * 0.01) * flake.drift,
+          rotation: flake.rotation + 0.5,
+          opacity:
+            Date.now() - flake.createdAt > 16000
+              ? Math.max(0, flake.opacity - 0.015)
+              : flake.opacity,
+        }));
       });
 
       // decay dei fiocchi depositati
@@ -181,7 +164,7 @@ const SnowEffect = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
       {snowflakes.map((flake) => {
         const parallax = flake.layer === 0 ? -scrollYRef.current * 0.05 : flake.layer === 1 ? -scrollYRef.current * 0.02 : 0;
         return (
