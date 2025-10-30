@@ -55,10 +55,24 @@ const imagePaths: string[] = Array.from({ length: 7 }, (_, i) => `/panettoni${i 
 const BackgroundPhotoPlaceholders = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [hidden, setHidden] = useState<Record<number, boolean>>({});
+  const [containerHeight, setContainerHeight] = useState<number>(0);
+  const [viewportWidth, setViewportWidth] = useState<number>(
+    typeof window !== "undefined" ? window.innerWidth : 1280
+  );
 
   useEffect(() => {
     const width = typeof window !== "undefined" ? window.innerWidth : 1280;
+    setViewportWidth(width);
     setSlots(chooseFixedSlots(width));
+    // match container to full page height so percentage tops distribute on full layer
+    const computeHeight = () => {
+      const h = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight
+      );
+      setContainerHeight(h);
+    };
+    computeHeight();
 
     // Update layout only when crossing breakpoints; avoid jitter on minor resizes
     const onResize = () => {
@@ -72,26 +86,49 @@ const BackgroundPhotoPlaceholders = () => {
       if (prevLabel !== currLabel) {
         setSlots(current);
       }
+      setViewportWidth(w);
+      // update container height on resize (orientation changes / dynamic UI)
+      setTimeout(() => {
+        const h = Math.max(
+          document.documentElement.scrollHeight,
+          document.body.scrollHeight
+        );
+        setContainerHeight(h);
+      }, 0);
     };
     window.addEventListener("resize", onResize);
+    // observe body size changes (content expansion)
+    const ro = new ResizeObserver(() => {
+      const h = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight
+      );
+      setContainerHeight(h);
+    });
+    try {
+      ro.observe(document.body);
+    } catch {}
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
   return (
     <div
-      className="pointer-events-none absolute inset-0 min-h-full"
-      style={{ zIndex: 1 }}
+      className="pointer-events-none absolute inset-0"
+      style={{ zIndex: 1, height: containerHeight ? `${containerHeight}px` : undefined }}
       aria-hidden
     >
       {slots.map((slot) => {
         const src = imagePaths[slot.id] || "";
         const isHidden = hidden[slot.id];
+        const isMobile = viewportWidth < 640;
+        // Distribute vertically across full layer on mobile using percentage positions
+        const topValue = isMobile ? `${((slot.id + 0.5) / 7) * 100}%` : `${slot.top}vh`;
         return (
           <div
             key={slot.id}
             className="absolute"
             style={{
-              top: `${slot.top}vh`,
+              top: topValue,
               left: `${slot.left}vw`,
               width: `clamp(260px, ${slot.vw}vw, 720px)`,
               aspectRatio: `${slot.ratio}`,
