@@ -17,6 +17,7 @@ const Snowfall = () => {
   const flakesRef = useRef<Snowflake[]>([]);
   const lastSpawnRef = useRef<number>(0);
   const animationRef = useRef<number | null>(null);
+  const scrollTimeoutRef = useRef<number | null>(null);
   const obstacleCacheRef = useRef<{ at: number; rects: Array<{ left: number; right: number; top: number }> }>({ at: 0, rects: [] });
   const dpr = useMemo(() => (typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1), []);
 
@@ -25,6 +26,7 @@ const Snowfall = () => {
     canvas.style.position = "fixed";
     canvas.style.inset = "0";
     canvas.style.pointerEvents = "none";
+    canvas.style.touchAction = "none"; // prevent touch interference on mobile
     canvas.style.zIndex = "50"; // render above content, pointer-events remain none
     canvasRef.current = canvas;
     document.body.appendChild(canvas);
@@ -44,10 +46,15 @@ const Snowfall = () => {
     resize();
     window.addEventListener("resize", resize);
 
+    // Optimized scroll handler: throttle to avoid scroll jank
     const onScroll = () => {
-      if (flakesRef.current.length) {
-        flakesRef.current = flakesRef.current.filter((f) => !f.hasLanded);
-      }
+      if (scrollTimeoutRef.current) return;
+      scrollTimeoutRef.current = requestAnimationFrame(() => {
+        if (flakesRef.current.length) {
+          flakesRef.current = flakesRef.current.filter((f) => !f.hasLanded);
+        }
+        scrollTimeoutRef.current = null;
+      });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
 
@@ -61,8 +68,10 @@ const Snowfall = () => {
 
     const getObstacles = (): Array<{ left: number; right: number; top: number }> => {
       const now = performance.now();
-      // Cache for a short time to avoid heavy DOM reads every frame
-      if (now - obstacleCacheRef.current.at < 120 && obstacleCacheRef.current.rects.length) {
+      // Cache longer on mobile to avoid scroll jank (200ms instead of 120ms)
+      const isMobile = window.innerWidth < 640;
+      const cacheTime = isMobile ? 200 : 120;
+      if (now - obstacleCacheRef.current.at < cacheTime && obstacleCacheRef.current.rects.length) {
         return obstacleCacheRef.current.rects;
       }
 
@@ -206,6 +215,7 @@ const Snowfall = () => {
 
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      if (scrollTimeoutRef.current) cancelAnimationFrame(scrollTimeoutRef.current);
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", onScroll as EventListener);
       flakesRef.current = [];
