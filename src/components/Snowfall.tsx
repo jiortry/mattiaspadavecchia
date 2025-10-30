@@ -17,6 +17,7 @@ const Snowfall = () => {
   const flakesRef = useRef<Snowflake[]>([]);
   const lastSpawnRef = useRef<number>(0);
   const animationRef = useRef<number | null>(null);
+  const obstacleCacheRef = useRef<{ at: number; rects: Array<{ left: number; right: number; top: number }> }>({ at: 0, rects: [] });
   const dpr = useMemo(() => (typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1), []);
 
   useEffect(() => {
@@ -58,23 +59,51 @@ const Snowfall = () => {
     const maxAgeMs = 14000; // remove after this
 
     const getObstacles = (): Array<{ left: number; right: number; top: number }> => {
-      const nodes = document.querySelectorAll<HTMLElement>("[data-snow-obstacle='true']");
+      const now = performance.now();
+      // Cache for a short time to avoid heavy DOM reads every frame
+      if (now - obstacleCacheRef.current.at < 120 && obstacleCacheRef.current.rects.length) {
+        return obstacleCacheRef.current.rects;
+      }
+
+      const containerNodes = document.querySelectorAll<HTMLElement>("[data-snow-obstacle='true']");
       const rects: Array<{ left: number; right: number; top: number }> = [];
-      nodes.forEach((el) => {
-        const r = el.getBoundingClientRect();
-        const cs = window.getComputedStyle(el);
-        const fontSize = parseFloat(cs.fontSize || "16");
-        let lineHeight = cs.lineHeight === "normal" ? NaN : parseFloat(cs.lineHeight || "0");
-        if (!isFinite(lineHeight) || lineHeight <= 0) {
-          // Fallback typical ratios for headings
-          lineHeight = fontSize * 1.25;
+
+      const pushTextNodeRects = (textNode: Text) => {
+        const textContent = textNode.textContent || "";
+        if (!textContent.trim()) return;
+        for (let i = 0; i < textContent.length; i++) {
+          const ch = textContent[i];
+          if (ch === "\n" || ch === "\r" || ch === "\t" || ch === " ") continue;
+          const range = document.createRange();
+          range.setStart(textNode, i);
+          range.setEnd(textNode, i + 1);
+          const clientRects = range.getClientRects();
+          for (let rIdx = 0; rIdx < clientRects.length; rIdx++) {
+            const r = clientRects[rIdx];
+            // Slight horizontal shrink to reduce visual clipping
+            const left = r.left + 1;
+            const right = r.right - 1;
+            const top = r.top; // top of the glyph box
+            if (right > left) rects.push({ left, right, top });
+          }
+          range.detach();
         }
-        const verticalInset = Math.max(0, (lineHeight - fontSize) / 2);
-        // No vertical bias: use text line top by adding inset from element top
-        const top = r.top + verticalInset;
-        // Mild horizontal shrink to avoid edge clipping
-        rects.push({ left: r.left + 4, right: r.right - 4, top });
+      };
+
+      const walk = (node: Node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          pushTextNodeRects(node as Text);
+          return;
+        }
+        const childNodes = node.childNodes;
+        for (let i = 0; i < childNodes.length; i++) walk(childNodes[i]);
+      };
+
+      containerNodes.forEach((el) => {
+        walk(el);
       });
+
+      obstacleCacheRef.current = { at: now, rects };
       return rects;
     };
 
@@ -118,11 +147,11 @@ const Snowfall = () => {
           f.x += f.vx;
           f.y += f.vy;
 
-          // collision check with obstacles (top edges only)
+          // collision check with obstacles (per-letter top edges)
           for (let k = 0; k < obstacles.length; k++) {
             const o = obstacles[k];
             if (f.x >= o.left && f.x <= o.right) {
-              if (f.y + f.radius >= o.top && f.y + f.radius <= o.top + 3) {
+              if (f.y + f.radius >= o.top && f.y + f.radius <= o.top + 2) {
                 f.y = o.top - f.radius;
                 f.vy = 0;
                 f.vx *= 0.2;
