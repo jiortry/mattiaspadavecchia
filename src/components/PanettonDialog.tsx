@@ -66,37 +66,56 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
             <h4 className="text-lg font-elegant font-semibold text-foreground mb-3">
               Allergeni
             </h4>
-            <ul className="space-y-2">
-              {panettone.allergens.map((allergen, index) => (
-                <li
-                  key={index}
-                  className="text-muted-foreground flex items-start animate-fade-in"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <span className="text-primary mr-2">•</span>
-                  <span className="italic">{allergen}</span>
-                </li>
-              ))}
-            </ul>
+            <p className="text-muted-foreground animate-fade-in">
+              {panettone.allergens.join(", ")}
+            </p>
           </div>
           <div>
             <h4 className="text-lg font-elegant font-semibold text-foreground mb-3">
               Valori nutrizionali medi per 100 g
             </h4>
-            <ul className="space-y-2 text-muted-foreground">
-              <li className="flex items-start"><span className="text-primary mr-2">•</span><span className="italic">Energia: {panettone.nutrition.energyKcal}</span></li>
-              <li className="flex items-start"><span className="text-primary mr-2">•</span><span className="italic">Proteine: {panettone.nutrition.protein}</span></li>
-              <li className="flex items-start"><span className="text-primary mr-2">•</span><span className="italic">Grassi: {panettone.nutrition.fat}</span></li>
-              <li className="flex items-start"><span className="text-primary mr-2">•</span><span className="italic">di cui saturi: {panettone.nutrition.saturatedFat}</span></li>
-              <li className="flex items-start"><span className="text-primary mr-2">•</span><span className="italic">Carboidrati: {panettone.nutrition.carbs}</span></li>
-              <li className="flex items-start"><span className="text-primary mr-2">•</span><span className="italic">di cui zuccheri: {panettone.nutrition.sugars}</span></li>
-              {panettone.nutrition.fiber && (
-                <li className="flex items-start"><span className="text-primary mr-2">•</span><span className="italic">Fibre: {panettone.nutrition.fiber}</span></li>
-              )}
-              {panettone.nutrition.salt && (
-                <li className="flex items-start"><span className="text-primary mr-2">•</span><span className="italic">Sale: {panettone.nutrition.salt}</span></li>
-              )}
-            </ul>
+            <div className="rounded-lg border border-border/40 overflow-hidden bg-muted/20">
+              <table className="w-full text-sm text-foreground">
+                <tbody>
+                  <tr className="border-b border-border/30">
+                    <td className="px-4 py-3 text-muted-foreground">Energia</td>
+                    <td className="px-4 py-3 text-right font-medium">{panettone.nutrition.energyKcal}</td>
+                  </tr>
+                  <tr className="border-b border-border/30">
+                    <td className="px-4 py-3 text-muted-foreground">Proteine</td>
+                    <td className="px-4 py-3 text-right font-medium">{panettone.nutrition.protein}</td>
+                  </tr>
+                  <tr className="border-b border-border/30">
+                    <td className="px-4 py-3 text-muted-foreground">Grassi</td>
+                    <td className="px-4 py-3 text-right font-medium">{panettone.nutrition.fat}</td>
+                  </tr>
+                  <tr className="border-b border-border/30">
+                    <td className="px-4 py-3 text-muted-foreground">di cui saturi</td>
+                    <td className="px-4 py-3 text-right font-medium">{panettone.nutrition.saturatedFat}</td>
+                  </tr>
+                  <tr className="border-b border-border/30">
+                    <td className="px-4 py-3 text-muted-foreground">Carboidrati</td>
+                    <td className="px-4 py-3 text-right font-medium">{panettone.nutrition.carbs}</td>
+                  </tr>
+                  <tr className="border-b border-border/30">
+                    <td className="px-4 py-3 text-muted-foreground">di cui zuccheri</td>
+                    <td className="px-4 py-3 text-right font-medium">{panettone.nutrition.sugars}</td>
+                  </tr>
+                  {panettone.nutrition.fiber && (
+                    <tr className="border-b border-border/30">
+                      <td className="px-4 py-3 text-muted-foreground">Fibre</td>
+                      <td className="px-4 py-3 text-right font-medium">{panettone.nutrition.fiber}</td>
+                    </tr>
+                  )}
+                  {panettone.nutrition.salt && (
+                    <tr>
+                      <td className="px-4 py-3 text-muted-foreground">Sale</td>
+                      <td className="px-4 py-3 text-right font-medium">{panettone.nutrition.salt}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
           <div className="pt-4 border-t border-border/30">
             <p className="text-2xl font-elegant text-primary font-semibold">

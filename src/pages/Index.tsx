@@ -3,7 +3,7 @@ import { Instagram } from "lucide-react";
 import PanettonCard from "@/components/PanettonCard";
 import PanettonDialog from "@/components/PanettonDialog";
 import { Button } from "@/components/ui/button";
-import BackgroundPhotoPlaceholders from "@/components/BackgroundPhotoPlaceholders";
+ 
 
 interface Panettone {
   name: string;
@@ -185,7 +185,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 relative">
-      <BackgroundPhotoPlaceholders />
       {/* Hero Section */}
       <header className="container mx-auto px-4 py-16 md:py-24">
         <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
