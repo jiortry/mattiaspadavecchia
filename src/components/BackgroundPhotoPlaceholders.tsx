@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Slot = {
   id: number;
@@ -53,24 +53,27 @@ const imagePaths: string[] = Array.from({ length: 7 }, (_, i) => `/panettoni${i 
 
 const BackgroundPhotoPlaceholders = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
+  const lockedMobileRef = useRef<boolean>(false);
   const [hidden, setHidden] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     const width = typeof window !== "undefined" ? window.innerWidth : 1280;
+    const label = (x: number) => (x < 640 ? "m" : x < 1024 ? "t" : "d");
+    const initialLabel = label(width);
+    // Lock mobile layout for the whole session so images never move on mobile
+    lockedMobileRef.current = initialLabel === "m";
     setSlots(chooseFixedSlots(width));
 
-    // Update layout only when crossing breakpoints; avoid jitter on minor resizes
     const onResize = () => {
+      if (lockedMobileRef.current) return; // never move on mobile
       const w = window.innerWidth;
-      const prev = slots;
-      const current = chooseFixedSlots(w);
-      // Determine current breakpoint label for prev and current
-      const label = (x: number) => (x < 640 ? "m" : x < 1024 ? "t" : "d");
-      const prevLabel = label(prev.length ? window.innerWidth : w);
       const currLabel = label(w);
-      if (prevLabel !== currLabel) {
-        setSlots(current);
-      }
+      // Update only when crossing breakpoints
+      setSlots((prev) => {
+        const prevLabel = prev.length ? label(width) : currLabel;
+        if (prevLabel !== currLabel) return chooseFixedSlots(w);
+        return prev;
+      });
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
