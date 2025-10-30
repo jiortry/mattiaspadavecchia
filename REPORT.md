@@ -1,2 +1,3 @@
 Aggiornamento completato
 Ottimizzato
+Bold
