@@ -119,7 +119,6 @@ const Index = () => {
               <PanettonCard
                 name={panettone.name}
                 price={panettone.price}
-                imagePlaceholder={panettone.imagePlaceholder}
                 onClick={() => handlePanettonClick(panettone)}
                 index={index}
               />

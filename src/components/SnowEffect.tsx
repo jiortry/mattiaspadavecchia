@@ -24,7 +24,7 @@ interface SettledFlake {
 
 type AnchorInfo = {
   el: Element;
-  type: "panettone" | "instagram";
+  type: "panettone" | "instagram" | "bgphoto";
   id?: string;
 };
 
@@ -48,7 +48,7 @@ const SnowEffect = () => {
       )
     );
     nodes.forEach((el) => {
-      const type = el.getAttribute('data-snow-anchor') as "panettone" | "instagram" | null;
+      const type = el.getAttribute('data-snow-anchor') as "panettone" | "instagram" | "bgphoto" | null;
       const id = el.getAttribute('data-snow-id') || undefined;
       // derive a type if not provided
       let derived: AnchorInfo['type'] = type || 'panettone';
@@ -117,8 +117,8 @@ const SnowEffect = () => {
           const updated = [...prevSet];
           for (const [key, info] of anchors.entries()) {
             const existingForAnchor = updated.filter((s) => s.anchorKey === key);
-            const limit = info.type === 'instagram' ? 14 : 28;
-            const chance = info.type === 'instagram' ? 0.08 : 0.05;
+            const limit = info.type === 'instagram' ? 14 : info.type === 'bgphoto' ? 40 : 28;
+            const chance = info.type === 'instagram' ? 0.08 : info.type === 'bgphoto' ? 0.12 : 0.05;
             if (existingForAnchor.length < limit && Math.random() < chance) {
               const rect = (info.el as HTMLElement).getBoundingClientRect();
               const localX = Math.max(0, Math.min(rect.width, Math.random() * rect.width));
@@ -126,9 +126,9 @@ const SnowEffect = () => {
                 id: Math.random(),
                 anchorKey: key,
                 localX,
-                size: Math.max(2, Math.random() * 3.5 + 1.5),
+                size: Math.max(2, Math.random() * 4 + 2),
                 createdAt: now,
-                lifespanMs: info.type === 'instagram' ? 12000 : 22000,
+                lifespanMs: info.type === 'instagram' ? 12000 : info.type === 'bgphoto' ? 20000 : 22000,
               });
             }
           }
