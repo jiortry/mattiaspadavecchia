@@ -219,11 +219,11 @@ const Index = () => {
       <header className="container mx-auto px-4 py-16 md:py-24">
         <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
           <h1
-            className="inline-block mx-auto text-5xl md:text-7xl font-elegant font-light text-foreground leading-tight"
+            className="inline-block mx-auto text-5xl md:text-7xl font-elegant font-bold text-foreground leading-tight"
           >
-            <span className="block">Panettoni</span>
+            <span className="block font-bold">Panettoni</span>
             <span className="mt-2 inline-block">
-              <span className="block text-primary italic font-normal">Artigianali</span>
+              <span className="block text-primary italic font-bold">Artigianali</span>
               <span className="block italic text-foreground/80 text-sm md:text-base -mt-1 text-right">da Mattia Spadavecchia</span>
             </span>
           </h1>
