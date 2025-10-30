@@ -127,13 +127,15 @@ const BackgroundPhotoPlaceholders = () => {
         const isMobile = viewportWidth < 640;
         // Distribute vertically across page height on mobile - more compact spacing
         const topValue = isMobile ? `${((slot.id + 0.5) / 7) * 100}%` : `${slot.top}vh`;
+        // More left shift for panettoni on the left side (left < 30vw)
+        const leftOffset = isMobile ? (slot.left < 30 ? -7 : -4) : 0;
         return (
           <div
             key={slot.id}
             className="absolute"
             style={{
               top: topValue,
-              left: isMobile ? `${Math.max(0, slot.left - 4)}vw` : `${slot.left}vw`,
+              left: isMobile ? `${Math.max(0, slot.left + leftOffset)}vw` : `${slot.left}vw`,
               width: `clamp(260px, ${slot.vw}vw, 720px)`,
               aspectRatio: `${slot.ratio}`,
               transform: `rotate(${slot.rotate}deg) skewX(${slot.tilt}deg)`,
