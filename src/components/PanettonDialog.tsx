@@ -8,7 +8,8 @@ import {
 
 interface Panettone {
   name: string;
-  price: string;
+  price?: string;
+  prices?: { kg1?: string; half?: string };
   ingredients: string[];
   description: string;
   allergens: string[];
@@ -45,6 +46,60 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
           </DialogDescription>
         </DialogHeader>
         <div className="mt-6 space-y-6">
+          {/* Mini tabella prezzi elegante */}
+          <div className="rounded-xl border border-border/40 bg-muted/10 overflow-hidden">
+            <table className="w-full text-sm">
+              <tbody>
+                {panettone.prices?.kg1 && (
+                  <tr className="border-b border-border/30">
+                    <td className="px-4 py-3 text-muted-foreground">1 kg</td>
+                    <td className="px-4 py-3 text-right font-elegant text-foreground">{panettone.prices.kg1}</td>
+                  </tr>
+                )}
+                {panettone.prices?.half && (
+                  <tr>
+                    <td className="px-4 py-3 text-muted-foreground">Mezzo kg</td>
+                    <td className="px-4 py-3 text-right font-elegant text-foreground">{panettone.prices.half}</td>
+                  </tr>
+                )}
+                {!panettone.prices && panettone.price && (
+                  <tr>
+                    <td className="px-4 py-3 text-muted-foreground">Prezzo</td>
+                    <td className="px-4 py-3 text-right font-elegant text-foreground">{panettone.price}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* CTA WhatsApp */}
+          <div className="flex items-center gap-3">
+            {panettone.prices?.kg1 && (
+              <button
+                className="rounded-full border border-border/50 px-4 py-2 text-sm font-elegant hover:bg-primary/10 transition-colors"
+                onClick={() => {
+                  const msg = `Vorrei prenotare un panettone ${panettone.name} 1kg. Grazie mille`;
+                  const href = `https://wa.me/4549999617?text=${encodeURIComponent(msg)}`;
+                  window.open(href, "_blank");
+                }}
+              >
+                Ordina 1kg
+              </button>
+            )}
+            {panettone.prices?.half && (
+              <button
+                className="rounded-full border border-border/50 px-4 py-2 text-sm font-elegant hover:bg-primary/10 transition-colors"
+                onClick={() => {
+                  const msg = `Vorrei prenotare un panettone ${panettone.name} mezzo kg. Grazie mille`;
+                  const href = `https://wa.me/4549999617?text=${encodeURIComponent(msg)}`;
+                  window.open(href, "_blank");
+                }}
+              >
+                Ordina 0,5kg
+              </button>
+            )}
+          </div>
+
           <div>
             <h4 className="text-lg font-elegant font-semibold text-foreground mb-3">
               Ingredienti
@@ -117,11 +172,7 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
               </table>
             </div>
           </div>
-          <div className="pt-4 border-t border-border/30">
-            <p className="text-2xl font-elegant text-primary font-semibold">
-              {panettone.price}
-            </p>
-          </div>
+          {/* prezzo legacy rimosso (già in tabella in alto) */}
         </div>
       </DialogContent>
     </Dialog>

@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 
 interface Panettone {
   name: string;
-  price: string;
+  price?: string; // legacy single price
+  prices?: { kg1?: string; half?: string };
   ingredients: string[];
   description: string;
   imagePlaceholder: string;
@@ -27,7 +28,7 @@ interface Panettone {
 const panettoni: Panettone[] = [
   {
     name: "Pistacchio",
-    price: "€34,00",
+    prices: { kg1: "€45,00", half: "€28,00" },
     ingredients: [
       "Farina di frumento tenero tipo \"0\"",
       "Burro da panna",
@@ -57,7 +58,7 @@ const panettoni: Panettone[] = [
   },
   {
     name: "Artigianale",
-    price: "€28,00",
+    prices: { kg1: "€35,00", half: "€25,00" },
     ingredients: [
       "Farina di frumento tenero tipo \"0\"",
       "Burro da panna",
@@ -84,7 +85,7 @@ const panettoni: Panettone[] = [
   },
   {
     name: "Cioccolato Bianco e Limone",
-    price: "€32,00",
+    prices: { kg1: "€38,00", half: "€26,00" },
     ingredients: [
       "Farina di frumento tenero tipo \"0\"",
       "Burro da panna",
@@ -113,7 +114,7 @@ const panettoni: Panettone[] = [
   },
   {
     name: "Caffè e Arancia",
-    price: "€30,00",
+    prices: { kg1: "€35,00", half: "€25,00" },
     ingredients: [
       "Farina di frumento tenero tipo \"0\"",
       "Burro da panna",
@@ -145,7 +146,7 @@ const panettoni: Panettone[] = [
   },
   {
     name: "Cioccolato Fondente",
-    price: "€32,00",
+    prices: { kg1: "€38,00", half: "€26,00" },
     ingredients: [
       "Farina di frumento tenero tipo \"0\"",
       "Burro da panna",
@@ -170,6 +171,35 @@ const panettoni: Panettone[] = [
       carbs: "50 g",
       sugars: "28-32 g",
       fiber: "2 g",
+    },
+  },
+  {
+    name: "Arancia, Cioccolato Fondente e Caramello",
+    prices: { kg1: "€38,00", half: "€28,00" },
+    ingredients: [
+      "Farina di frumento tenero tipo \"0\"",
+      "Burro da panna",
+      "Zucchero",
+      "Tuorlo d’uovo di categoria \"A\"",
+      "Acqua",
+      "Lievito madre vivo (farina di grano tenero, acqua)",
+      "Arancia candita",
+      "Cioccolato fondente",
+      "Caramello",
+      "Miele",
+      "Aromi naturali",
+      "Sale",
+    ],
+    description: "Contrasto goloso tra agrumi, fondente e note di caramello.",
+    imagePlaceholder: "Foto panettone arancia, cioccolato fondente e caramello",
+    allergens: ["Glutine", "Uova", "Latte", "Soia"],
+    nutrition: {
+      energyKcal: "430 kcal",
+      protein: "6 g",
+      fat: "22 g",
+      saturatedFat: "12 g",
+      carbs: "49 g",
+      sugars: "30-33 g",
     },
   },
 ];
