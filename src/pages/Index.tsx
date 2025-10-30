@@ -30,7 +30,7 @@ const panettoni: Panettone[] = [
     imagePlaceholder: "Foto panettone classico",
   },
   {
-    name: "Ciocc Bianco e Limone",
+    name: "Cioccolato Bianco e Limone",
     price: "€32,00",
     ingredients: [
       "Farina di grano tenero tipo 0",
@@ -46,7 +46,7 @@ const panettoni: Panettone[] = [
     imagePlaceholder: "Foto panettone cioccolato bianco e limone",
   },
   {
-    name: "Ciocc Fondente",
+    name: "Cioccolato Fondente",
     price: "€32,00",
     ingredients: [
       "Farina di grano tenero tipo 0",
