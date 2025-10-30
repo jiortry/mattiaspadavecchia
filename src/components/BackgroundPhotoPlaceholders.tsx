@@ -14,13 +14,14 @@ const randomBetween = (min: number, max: number) => Math.random() * (max - min) 
 
 // Fixed, deterministic layouts per breakpoint (mobile / tablet / desktop)
 const FIXED_SLOTS_MOBILE: Slot[] = [
-  { id: 0, top: 2,  left: 6,  vw: 72, ratio: 1.05, rotate: -4, tilt: -1.5 },
-  { id: 1, top: 26, left: 12, vw: 76, ratio: 0.95, rotate: 3,  tilt: 1.2 },
-  { id: 2, top: 50, left: 8,  vw: 78, ratio: 1.10, rotate: -6, tilt: -1.2 },
-  { id: 3, top: 74, left: 14, vw: 74, ratio: 0.98, rotate: 5,  tilt: 0.8 },
-  { id: 4, top: -10, left: 52, vw: 62, ratio: 1.12, rotate: 7, tilt: 1.0 },
-  { id: 5, top: 36, left: 54, vw: 64, ratio: 0.92, rotate: -5, tilt: -0.6 },
-  { id: 6, top: 88, left: 52, vw: 60, ratio: 1.08, rotate: -2, tilt: 0.5 },
+  // Alterna sinistra/destra, con step verticale ampio per evitare sovrapposizioni
+  { id: 0, top: 2,   left: 6,  vw: 68, ratio: 1.05, rotate: -4, tilt: -1.2 },
+  { id: 1, top: 22,  left: 56, vw: 62, ratio: 0.98, rotate: 4,  tilt: 0.8 },
+  { id: 2, top: 42,  left: 8,  vw: 66, ratio: 1.08, rotate: -6, tilt: -1.0 },
+  { id: 3, top: 62,  left: 54, vw: 60, ratio: 0.98, rotate: 5,  tilt: 0.6 },
+  { id: 4, top: 82,  left: 10, vw: 64, ratio: 1.10, rotate: -5, tilt: -0.8 },
+  { id: 5, top: 102, left: 58, vw: 58, ratio: 0.96, rotate: 6,  tilt: 0.6 },
+  { id: 6, top: 122, left: 12, vw: 62, ratio: 1.06, rotate: -3, tilt: -0.6 },
 ];
 
 const FIXED_SLOTS_TABLET: Slot[] = [
