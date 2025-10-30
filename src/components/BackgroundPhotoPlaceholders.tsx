@@ -137,7 +137,7 @@ const BackgroundPhotoPlaceholders = () => {
             className="absolute"
             style={{
               top: topValue,
-              left: `${slot.left}vw`,
+              left: isMobile ? `${Math.max(0, slot.left - 4)}vw` : `${slot.left}vw`,
               width: `clamp(260px, ${slot.vw}vw, 720px)`,
               aspectRatio: `${slot.ratio}`,
               transform: `rotate(${slot.rotate}deg) skewX(${slot.tilt}deg)`,
