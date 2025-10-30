@@ -223,6 +223,7 @@ const Index = () => {
           >
             Panettoni
             <span className="block text-primary italic font-normal mt-2">Artigianali</span>
+            <span className="block italic text-foreground/80 text-base md:text-lg mt-2">da Mattia Spadavecchia</span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground italic max-w-2xl mx-auto">
             Tradizione e passione in ogni fetta. Lievitati naturalmente per 48 ore.
