@@ -12,125 +12,41 @@ type Slot = {
 
 const randomBetween = (min: number, max: number) => Math.random() * (max - min) + min;
 
-const generateSlots = (count = 7): Slot[] => {
-  if (typeof window === "undefined") return [];
+// Fixed, deterministic layouts per breakpoint (mobile / tablet / desktop)
+const FIXED_SLOTS_MOBILE: Slot[] = [
+  { id: 0, top: 2,  left: 6,  vw: 72, ratio: 1.05, rotate: -4, tilt: -1.5 },
+  { id: 1, top: 26, left: 12, vw: 76, ratio: 0.95, rotate: 3,  tilt: 1.2 },
+  { id: 2, top: 50, left: 8,  vw: 78, ratio: 1.10, rotate: -6, tilt: -1.2 },
+  { id: 3, top: 74, left: 14, vw: 74, ratio: 0.98, rotate: 5,  tilt: 0.8 },
+  { id: 4, top: -10, left: 52, vw: 62, ratio: 1.12, rotate: 7, tilt: 1.0 },
+  { id: 5, top: 36, left: 54, vw: 64, ratio: 0.92, rotate: -5, tilt: -0.6 },
+  { id: 6, top: 88, left: 52, vw: 60, ratio: 1.08, rotate: -2, tilt: 0.5 },
+];
 
-  const viewportWidth = window.innerWidth || 1280;
-  const viewportHeight = window.innerHeight || 800;
+const FIXED_SLOTS_TABLET: Slot[] = [
+  { id: 0, top: -6, left: 6,  vw: 44, ratio: 1.06, rotate: -5, tilt: -1.2 },
+  { id: 1, top: 16, left: 52, vw: 40, ratio: 0.94, rotate: 4,  tilt: 0.8 },
+  { id: 2, top: 36, left: 10, vw: 46, ratio: 1.10, rotate: -7, tilt: -1.0 },
+  { id: 3, top: 58, left: 56, vw: 42, ratio: 0.98, rotate: 6,  tilt: 0.6 },
+  { id: 4, top: 74, left: 6,  vw: 40, ratio: 1.08, rotate: -3, tilt: -0.6 },
+  { id: 5, top: 2,  left: 72, vw: 34, ratio: 1.02, rotate: -2, tilt: 0.4 },
+  { id: 6, top: 82, left: 72, vw: 36, ratio: 0.96, rotate: 5,  tilt: 0.4 },
+];
 
-  // Responsive size ranges (in vw)
-  const sizeRange = (() => {
-    if (viewportWidth < 380) return { min: 22, max: 28 };
-    if (viewportWidth < 640) return { min: 24, max: 30 };
-    if (viewportWidth < 1024) return { min: 24, max: 34 };
-    return { min: 26, max: 36 };
-  })();
+const FIXED_SLOTS_DESKTOP: Slot[] = [
+  { id: 0, top: -10, left: 6,  vw: 34, ratio: 1.08, rotate: -6, tilt: -1.2 },
+  { id: 1, top: 8,   left: 62, vw: 32, ratio: 0.96, rotate: 5,  tilt: 0.8 },
+  { id: 2, top: 30,  left: 12, vw: 36, ratio: 1.12, rotate: -8, tilt: -0.8 },
+  { id: 3, top: 50,  left: 66, vw: 34, ratio: 0.98, rotate: 7,  tilt: 0.6 },
+  { id: 4, top: 68,  left: 8,  vw: 32, ratio: 1.06, rotate: -4, tilt: -0.6 },
+  { id: 5, top: -6,  left: 80, vw: 28, ratio: 1.00, rotate: -3, tilt: 0.4 },
+  { id: 6, top: 82,  left: 74, vw: 30, ratio: 0.94, rotate: 6,  tilt: 0.4 },
+];
 
-  const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
-
-  // Blue-noise-like anchors to spread content across the viewport
-  const anchors: Array<{ ax: number; ay: number }> = [
-    { ax: 0.18, ay: 0.18 },
-    { ax: 0.82, ay: 0.18 },
-    { ax: 0.50, ay: 0.35 },
-    { ax: 0.24, ay: 0.62 },
-    { ax: 0.78, ay: 0.62 },
-    { ax: 0.36, ay: 0.84 },
-    { ax: 0.66, ay: 0.78 },
-  ];
-
-  const toRect = (slot: Slot) => {
-    const widthPx = (slot.vw / 100) * viewportWidth;
-    const heightPx = widthPx / slot.ratio;
-    const leftPx = (slot.left / 100) * viewportWidth;
-    const topPx = (slot.top / 100) * viewportHeight;
-    return { left: leftPx, top: topPx, width: widthPx, height: heightPx };
-  };
-
-  const intersectionArea = (a: { left: number; top: number; width: number; height: number }, b: { left: number; top: number; width: number; height: number }) => {
-    const x1 = Math.max(a.left, b.left);
-    const y1 = Math.max(a.top, b.top);
-    const x2 = Math.min(a.left + a.width, b.left + b.width);
-    const y2 = Math.min(a.top + a.height, b.top + b.height);
-    const w = Math.max(0, x2 - x1);
-    const h = Math.max(0, y2 - y1);
-    return w * h;
-  };
-
-  const slots: Slot[] = [];
-  const maxTriesPerSlot = 200;
-  for (let i = 0; i < count; i++) {
-    const anchor = anchors[i % anchors.length];
-    let placed: Slot | null = null;
-    for (let tries = 0; tries < maxTriesPerSlot; tries++) {
-      const vw = randomBetween(sizeRange.min, sizeRange.max);
-      const ratio = randomBetween(0.9, 1.2);
-
-      // Convert vw width to vh height for clamping top
-      const widthPx = (vw / 100) * viewportWidth;
-      const heightPx = widthPx / ratio;
-      const heightVh = (heightPx / viewportHeight) * 100;
-
-      // Jitter around anchor, but keep fully inside viewport
-      const jitterVW = randomBetween(-8, 8);
-      const jitterVH = randomBetween(-8, 8);
-      const left = clamp(anchor.ax * 100 + jitterVW, 0, 100 - vw);
-      const top = clamp(anchor.ay * 100 + jitterVH, 0, Math.max(0, 100 - heightVh));
-
-      const candidate: Slot = {
-        id: i,
-        top,
-        left,
-        rotate: randomBetween(-10, 10),
-        vw,
-        ratio,
-        tilt: randomBetween(-2.5, 2.5),
-      };
-
-      const candRect = toRect(candidate);
-      const candArea = candRect.width * candRect.height;
-
-      // Overlap constraint: at most 20% of smaller area with any existing
-      let ok = true;
-      for (let k = 0; k < slots.length; k++) {
-        const otherRect = toRect(slots[k]);
-        const otherArea = otherRect.width * otherRect.height;
-        const inter = intersectionArea(candRect, otherRect);
-        const denom = Math.max(1, Math.min(candArea, otherArea));
-        const overlapRatio = inter / denom;
-        if (overlapRatio > 0.2) {
-          ok = false;
-          break;
-        }
-      }
-
-      if (ok) {
-        placed = candidate;
-        break;
-      }
-    }
-    // Fallback: if not placed respecting overlap, still place clamped at anchor (smallest size)
-    if (!placed) {
-      const vw = sizeRange.min;
-      const ratio = 1.0;
-      const widthPx = (vw / 100) * viewportWidth;
-      const heightPx = widthPx / ratio;
-      const heightVh = (heightPx / viewportHeight) * 100;
-      const left = clamp(anchor.ax * 100, 0, 100 - vw);
-      const top = clamp(anchor.ay * 100, 0, Math.max(0, 100 - heightVh));
-      placed = {
-        id: i,
-        top,
-        left,
-        rotate: 0,
-        vw,
-        ratio,
-        tilt: 0,
-      };
-    }
-    slots.push(placed);
-  }
-  return slots;
+const chooseFixedSlots = (width: number): Slot[] => {
+  if (width < 640) return FIXED_SLOTS_MOBILE;
+  if (width < 1024) return FIXED_SLOTS_TABLET;
+  return FIXED_SLOTS_DESKTOP;
 };
 
 const imagePaths: string[] = Array.from({ length: 7 }, (_, i) => `/panettoni${i + 1}.png`);
@@ -140,7 +56,24 @@ const BackgroundPhotoPlaceholders = () => {
   const [hidden, setHidden] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
-    setSlots(generateSlots(7));
+    const width = typeof window !== "undefined" ? window.innerWidth : 1280;
+    setSlots(chooseFixedSlots(width));
+
+    // Update layout only when crossing breakpoints; avoid jitter on minor resizes
+    const onResize = () => {
+      const w = window.innerWidth;
+      const prev = slots;
+      const current = chooseFixedSlots(w);
+      // Determine current breakpoint label for prev and current
+      const label = (x: number) => (x < 640 ? "m" : x < 1024 ? "t" : "d");
+      const prevLabel = label(prev.length ? window.innerWidth : w);
+      const currLabel = label(w);
+      if (prevLabel !== currLabel) {
+        setSlots(current);
+      }
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   return (

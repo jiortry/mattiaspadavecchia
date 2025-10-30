@@ -217,8 +217,7 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 relative z-10">
       {/* Hero Section */}
       <header className="container mx-auto px-4 py-16 md:py-24">
-        <div className="max-w-4xl mx-auto animate-fade-in">
-          <div className="text-center space-y-6 bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-6 md:p-10 shadow-[var(--shadow-elegant)]">
+        <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
           <h1
             className="inline-block mx-auto text-5xl md:text-7xl font-elegant font-light text-foreground leading-tight"
           >
@@ -228,13 +227,12 @@ const Index = () => {
           <p className="text-lg md:text-xl text-muted-foreground italic max-w-2xl mx-auto">
             Tradizione e passione in ogni fetta. Lievitati naturalmente per 48 ore.
           </p>
-          </div>
         </div>
       </header>
 
       {/* Panettoni Premium List */}
       <main className="container mx-auto px-4 py-12 md:py-16">
-        <div className="max-w-3xl mx-auto bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-4 sm:p-6 md:p-8 space-y-8 md:space-y-10 shadow-[var(--shadow-elegant)]">
+        <div className="max-w-3xl mx-auto space-y-8 md:space-y-10">
           {panettoni.map((panettone, index) => (
             <div
               key={panettone.name}
@@ -254,12 +252,12 @@ const Index = () => {
 
       {/* Instagram Contact */}
       <footer className="container mx-auto px-4 py-16 md:py-20">
-        <div className="max-w-2xl mx-auto text-center space-y-8 bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-6 md:p-10 shadow-[var(--shadow-elegant)]">
+        <div className="max-w-2xl mx-auto text-center space-y-8">
           <div className="space-y-4">
             <h2
               className="inline-block mx-auto text-3xl md:text-4xl font-elegant font-light text-foreground"
             >
-              Seguici su Instagram
+              Seguimi su Instagram
             </h2>
             <p className="text-muted-foreground italic">
               Per ordini e informazioni
