@@ -128,7 +128,7 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
                   window.open(href, "_blank");
                 }}
               >
-                Ordina 0,5kg
+                Ordina Mezzo Kg
               </button>
             )}
           </div>
