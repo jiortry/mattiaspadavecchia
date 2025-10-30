@@ -28,9 +28,10 @@ const FIXED_SLOTS_TABLET: Slot[] = [
   { id: 3, top: 72, left: 60, vw: 40, ratio: 0.98, rotate: 5,  tilt: 0.6 },
 ];
 
+// Desktop: clean, balanced composition with two aligned images
 const FIXED_SLOTS_DESKTOP: Slot[] = [
-  { id: 0, top: -8, left: 6,  vw: 36, ratio: 1.08, rotate: -6, tilt: -1.0 },
-  { id: 1, top: 18, left: 66, vw: 34, ratio: 0.96, rotate: 5,  tilt: 0.8 },
+  { id: 0, top: 6,  left: 6,  vw: 34, ratio: 1.05, rotate: 0, tilt: 0 },
+  { id: 1, top: 60, left: 64, vw: 34, ratio: 1.05, rotate: 0, tilt: 0 },
 ];
 
 const chooseFixedSlots = (width: number): Slot[] => {
