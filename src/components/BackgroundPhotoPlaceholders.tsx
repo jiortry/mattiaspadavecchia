@@ -128,7 +128,7 @@ const BackgroundPhotoPlaceholders = () => {
         // Distribute vertically across page height on mobile - more compact spacing
         const topValue = isMobile ? `${((slot.id + 0.5) / 7) * 100}%` : `${slot.top}vh`;
         // More left shift for panettoni on the left side (left < 30vw)
-        const leftOffset = isMobile ? (slot.left < 30 ? -7 : -4) : 0;
+        const leftOffset = isMobile ? (slot.left < 30 ? -12 : -4) : 0;
         return (
           <div
             key={slot.id}
