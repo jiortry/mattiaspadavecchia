@@ -19,7 +19,11 @@ const PanettonCard = ({ name, price, imagePlaceholder, onClick, index }: Panetto
       onClick={onClick}
     >
       <CardContent className="p-0">
-        <div className="aspect-square bg-gradient-to-br from-muted/30 to-muted/60 flex items-center justify-center relative overflow-hidden">
+        <div
+          className="aspect-square bg-gradient-to-br from-muted/30 to-muted/60 flex items-center justify-center relative overflow-hidden"
+          data-snow-anchor="panettone"
+          data-snow-id={index}
+        >
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           <span className="text-6xl opacity-20 group-hover:opacity-30 transition-opacity duration-500 animate-float">
             🎄

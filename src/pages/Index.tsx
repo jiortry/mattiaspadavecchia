@@ -140,6 +140,7 @@ const Index = () => {
           <Button
             size="lg"
             className="bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground font-elegant text-lg px-8 py-6 rounded-full shadow-[var(--shadow-elegant)] transition-all duration-300 hover:scale-105"
+            data-snow-anchor="instagram"
             onClick={() => window.open('https://instagram.com/m.spd_', '_blank')}
           >
             <Instagram className="mr-2 h-5 w-5" />
