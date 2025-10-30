@@ -7,7 +7,6 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Snowfall from "./components/Snowfall";
 import BackgroundPhotoPlaceholders from "./components/BackgroundPhotoPlaceholders";
-import MobileScrim from "./components/MobileScrim";
 
 const queryClient = new QueryClient();
 
@@ -17,17 +16,19 @@ const App = () => (
       <Toaster />
       <Sonner />
       <Snowfall />
-      <BackgroundPhotoPlaceholders />
-      {/* Scrim: mobile full-page absolute, desktop/tablet fixed */}
-      <MobileScrim />
-      <div className="pointer-events-none hidden md:block fixed inset-0 z-[5] bg-black/55" aria-hidden />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      {/* Wrap content to allow full-height overlays that follow page height */}
+      <div className="relative min-h-screen">
+        <BackgroundPhotoPlaceholders />
+        {/* Stronger scrim for higher contrast that spans the entire page height */}
+        <div className="pointer-events-none absolute inset-0 z-[5] bg-black/55 h-full" aria-hidden />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
     </TooltipProvider>
   </QueryClientProvider>
 );
