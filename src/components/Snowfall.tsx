@@ -24,7 +24,7 @@ const Snowfall = () => {
     canvas.style.position = "fixed";
     canvas.style.inset = "0";
     canvas.style.pointerEvents = "none";
-    canvas.style.zIndex = "0"; // keep under content; content should have higher z
+    canvas.style.zIndex = "50"; // render above content, pointer-events remain none
     canvasRef.current = canvas;
     document.body.appendChild(canvas);
 

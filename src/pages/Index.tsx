@@ -188,7 +188,10 @@ const Index = () => {
       {/* Hero Section */}
       <header className="container mx-auto px-4 py-16 md:py-24">
         <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
-          <h1 className="text-5xl md:text-7xl font-elegant font-light text-foreground leading-tight">
+          <h1
+            className="text-5xl md:text-7xl font-elegant font-light text-foreground leading-tight"
+            data-snow-obstacle="true"
+          >
             Panettoni
             <span className="block text-primary italic font-normal mt-2">Artigianali</span>
           </h1>
@@ -222,7 +225,10 @@ const Index = () => {
       <footer className="container mx-auto px-4 py-16 md:py-20">
         <div className="max-w-2xl mx-auto text-center space-y-8">
           <div className="space-y-4">
-            <h2 className="text-3xl md:text-4xl font-elegant font-light text-foreground">
+            <h2
+              className="text-3xl md:text-4xl font-elegant font-light text-foreground"
+              data-snow-obstacle="true"
+            >
               Seguici su Instagram
             </h2>
             <p className="text-muted-foreground italic">

@@ -12,16 +12,18 @@ const PanettonCard = ({ name, price, onClick, index }: PanettonCardProps) => {
 
   return (
     <Card
-      className={`group cursor-pointer overflow-hidden border-border/50 bg-card hover:shadow-[var(--shadow-elegant)] transition-all duration-500 ${
+      className={`group cursor-pointer overflow-visible bg-transparent border-0 shadow-none transition-all duration-300 ${
         isEven ? "md:translate-x-8 ml-auto" : "md:-translate-x-8 mr-auto"
-      } hover:scale-[1.01] max-w-sm md:max-w-md w-full`}
+      } max-w-sm md:max-w-md w-full`}
       onClick={onClick}
-      data-snow-obstacle="true"
       style={{ marginTop: `${(index % 3) * 6}px` }}
     >
       <CardContent className="p-0">
         <div className="p-5 md:p-6 space-y-2">
-          <h3 className="text-xl md:text-2xl font-elegant font-medium text-foreground group-hover:text-primary transition-colors duration-300">
+          <h3
+            className="text-xl md:text-2xl font-elegant font-medium text-foreground group-hover:text-primary transition-colors duration-300"
+            data-snow-obstacle="true"
+          >
             {name}
           </h3>
           <p className="text-sm md:text-base text-muted-foreground italic group-hover:text-primary transition-colors duration-300">
