@@ -190,7 +190,6 @@ const Index = () => {
         <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
           <h1
             className="inline-block mx-auto text-5xl md:text-7xl font-elegant font-light text-foreground leading-tight"
-            data-snow-obstacle="true"
           >
             Panettoni
             <span className="block text-primary italic font-normal mt-2">Artigianali</span>
@@ -227,7 +226,6 @@ const Index = () => {
           <div className="space-y-4">
             <h2
               className="inline-block mx-auto text-3xl md:text-4xl font-elegant font-light text-foreground"
-              data-snow-obstacle="true"
             >
               Seguici su Instagram
             </h2>
