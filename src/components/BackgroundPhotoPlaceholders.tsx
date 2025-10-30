@@ -31,8 +31,6 @@ const FIXED_SLOTS_TABLET: Slot[] = [
 const FIXED_SLOTS_DESKTOP: Slot[] = [
   { id: 0, top: -8, left: 6,  vw: 36, ratio: 1.08, rotate: -6, tilt: -1.0 },
   { id: 1, top: 18, left: 66, vw: 34, ratio: 0.96, rotate: 5,  tilt: 0.8 },
-  { id: 2, top: 48, left: 10, vw: 36, ratio: 1.10, rotate: -7, tilt: -0.8 },
-  { id: 3, top: 74, left: 68, vw: 32, ratio: 0.98, rotate: 6,  tilt: 0.6 },
 ];
 
 const chooseFixedSlots = (width: number): Slot[] => {
