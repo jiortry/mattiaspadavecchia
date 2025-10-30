@@ -17,7 +17,7 @@ const App = () => (
       <Sonner />
       <Snowfall />
       {/* Wrap content to allow full-height overlays that follow page height */}
-      <div className="relative min-h-screen">
+      <div className="relative min-h-screen overflow-x-hidden">
         <BackgroundPhotoPlaceholders />
         {/* Stronger scrim for higher contrast that spans the entire page height */}
         <div className="pointer-events-none absolute inset-0 z-[5] bg-black/55 h-full" aria-hidden />
