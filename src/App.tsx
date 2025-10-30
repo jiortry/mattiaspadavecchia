@@ -19,6 +19,15 @@ const App = () => (
       <BackgroundPhotoPlaceholders />
       {/* Stronger scrim for higher contrast between background images and text */}
       <div className="pointer-events-none fixed inset-0 z-[5] bg-black/55" aria-hidden />
+      {/* Bottom fade to blend background images smoothly with page background during long scrolls */}
+      <div
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-[6] h-[32vh]"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(8,8,8,0.75) 60%, rgba(0,0,0,0.98) 100%)",
+        }}
+        aria-hidden
+      />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
