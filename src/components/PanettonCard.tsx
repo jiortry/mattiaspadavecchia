@@ -25,7 +25,9 @@ const PanettonCard = ({ name, price, onClick, index }: PanettonCardProps) => {
           className={`p-5 md:p-6 space-y-2 ${isEven ? "md:text-right" : "md:text-left"}`}
         >
           <h3
-            className="text-xl md:text-2xl font-elegant font-medium text-foreground group-hover:text-primary transition-colors duration-300"
+            className={`inline-block text-xl md:text-2xl font-elegant font-medium text-foreground group-hover:text-primary transition-colors duration-300 ${
+              isEven ? "md:ml-auto" : ""
+            }`}
             data-snow-obstacle="true"
           >
             {name}
