@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Instagram, Whatsapp } from "lucide-react";
+import { Instagram, MessageCircle } from "lucide-react";
 import PanettonCard from "@/components/PanettonCard";
 import PanettonDialog from "@/components/PanettonDialog";
 import { Button } from "@/components/ui/button";
@@ -281,7 +281,7 @@ const Index = () => {
                 window.open(href, '_blank');
               }}
             >
-              <Whatsapp className="mr-2 h-5 w-5" />
+              <MessageCircle className="mr-2 h-5 w-5" />
               Scrivimi per più informazioni
             </Button>
           </div>
