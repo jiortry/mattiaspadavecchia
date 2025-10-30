@@ -9,7 +9,7 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Semi-dark, warm Christmas palette (default) */
-    --background: 15 25% 10%;
+    --background: 15 25% 12%;
     --foreground: 35 40% 96%;
 
     --card: 15 28% 12%;
@@ -25,7 +25,7 @@ All colors MUST be HSL.
     --primary-glow: 22 90% 62%;
 
     /* Deep, subtle secondary surfaces */
-    --secondary: 10 30% 16%;
+    --secondary: 10 30% 18%;
     --secondary-foreground: 35 40% 92%;
 
     /* Muted neutrals with warm tint */
@@ -39,7 +39,7 @@ All colors MUST be HSL.
     --destructive: 0 72% 40%;
     --destructive-foreground: 35 40% 96%;
 
-    --border: 15 18% 22%;
+    --border: 15 18% 23%;
     --input: 15 18% 22%;
     --ring: 18 80% 55%;
 
@@ -70,7 +70,7 @@ All colors MUST be HSL.
 
   .dark {
     /* Keep a slightly deeper variant for explicit dark mode */
-    --background: 15 25% 8%;
+    --background: 15 25% 10%;
     --foreground: 35 40% 96%;
 
     --card: 15 28% 10%;
@@ -84,7 +84,7 @@ All colors MUST be HSL.
     
     --primary-glow: 22 90% 62%;
 
-    --secondary: 10 28% 14%;
+    --secondary: 10 28% 16%;
     --secondary-foreground: 35 40% 92%;
 
     --muted: 12 20% 18%;
@@ -96,7 +96,7 @@ All colors MUST be HSL.
     --destructive: 0 62% 32%;
     --destructive-foreground: 35 40% 96%;
 
-    --border: 15 20% 18%;
+    --border: 15 20% 19%;
     --input: 15 20% 18%;
     --ring: 18 80% 55%;
     --sidebar-background: 15 22% 10%;
