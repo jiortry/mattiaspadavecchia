@@ -13,39 +13,26 @@ type Slot = {
 const randomBetween = (min: number, max: number) => Math.random() * (max - min) + min;
 
 // Fixed, deterministic layouts per breakpoint (mobile / tablet / desktop)
-// Mobile layout with 11 fixed slots (duplicates allowed via modulo on image index)
+// Mobile layout with 4 fixed slots
 const FIXED_SLOTS_MOBILE: Slot[] = [
-  { id: 0,  top: -6, left: 4,  vw: 74, ratio: 1.04, rotate: -4, tilt: -1.2 },
-  { id: 1,  top: 10, left: 54, vw: 66, ratio: 0.96, rotate: 3,  tilt: 0.8 },
-  { id: 2,  top: 22, left: 8,  vw: 72, ratio: 1.10, rotate: -5, tilt: -1.0 },
-  { id: 3,  top: 34, left: 56, vw: 64, ratio: 0.98, rotate: 4,  tilt: 0.8 },
-  { id: 4,  top: 46, left: 6,  vw: 70, ratio: 1.08, rotate: -3, tilt: -0.6 },
-  { id: 5,  top: 58, left: 58, vw: 62, ratio: 1.00, rotate: 5,  tilt: 0.6 },
-  { id: 6,  top: 70, left: 10, vw: 68, ratio: 0.94, rotate: -4, tilt: -0.6 },
-  { id: 7,  top: 82, left: 56, vw: 60, ratio: 1.06, rotate: 3,  tilt: 0.5 },
-  { id: 8,  top: -2, left: 70, vw: 52, ratio: 1.02, rotate: -2, tilt: 0.4 },
-  { id: 9,  top: 50, left: 78, vw: 44, ratio: 0.98, rotate: 6,  tilt: 0.4 },
-  { id: 10, top: 92, left: 24, vw: 56, ratio: 1.12, rotate: -3, tilt: -0.4 },
+  { id: 0, top: -6, left: 6,  vw: 78, ratio: 1.06, rotate: -5, tilt: -1.0 },
+  { id: 1, top: 26, left: 56, vw: 70, ratio: 0.96, rotate: 4,  tilt: 0.8 },
+  { id: 2, top: 52, left: 8,  vw: 74, ratio: 1.10, rotate: -6, tilt: -0.8 },
+  { id: 3, top: 78, left: 54, vw: 66, ratio: 0.98, rotate: 5,  tilt: 0.6 },
 ];
 
 const FIXED_SLOTS_TABLET: Slot[] = [
-  { id: 0, top: -6, left: 6,  vw: 44, ratio: 1.06, rotate: -5, tilt: -1.2 },
-  { id: 1, top: 16, left: 52, vw: 40, ratio: 0.94, rotate: 4,  tilt: 0.8 },
-  { id: 2, top: 36, left: 10, vw: 46, ratio: 1.10, rotate: -7, tilt: -1.0 },
-  { id: 3, top: 58, left: 56, vw: 42, ratio: 0.98, rotate: 6,  tilt: 0.6 },
-  { id: 4, top: 74, left: 6,  vw: 40, ratio: 1.08, rotate: -3, tilt: -0.6 },
-  { id: 5, top: 2,  left: 72, vw: 34, ratio: 1.02, rotate: -2, tilt: 0.4 },
-  { id: 6, top: 82, left: 72, vw: 36, ratio: 0.96, rotate: 5,  tilt: 0.4 },
+  { id: 0, top: -6, left: 6,  vw: 46, ratio: 1.06, rotate: -5, tilt: -1.0 },
+  { id: 1, top: 22, left: 58, vw: 42, ratio: 0.96, rotate: 4,  tilt: 0.8 },
+  { id: 2, top: 48, left: 10, vw: 44, ratio: 1.10, rotate: -6, tilt: -0.8 },
+  { id: 3, top: 72, left: 60, vw: 40, ratio: 0.98, rotate: 5,  tilt: 0.6 },
 ];
 
 const FIXED_SLOTS_DESKTOP: Slot[] = [
-  { id: 0, top: -10, left: 6,  vw: 34, ratio: 1.08, rotate: -6, tilt: -1.2 },
-  { id: 1, top: 8,   left: 62, vw: 32, ratio: 0.96, rotate: 5,  tilt: 0.8 },
-  { id: 2, top: 30,  left: 12, vw: 36, ratio: 1.12, rotate: -8, tilt: -0.8 },
-  { id: 3, top: 50,  left: 66, vw: 34, ratio: 0.98, rotate: 7,  tilt: 0.6 },
-  { id: 4, top: 68,  left: 8,  vw: 32, ratio: 1.06, rotate: -4, tilt: -0.6 },
-  { id: 5, top: -6,  left: 80, vw: 28, ratio: 1.00, rotate: -3, tilt: 0.4 },
-  { id: 6, top: 82,  left: 74, vw: 30, ratio: 0.94, rotate: 6,  tilt: 0.4 },
+  { id: 0, top: -8, left: 6,  vw: 36, ratio: 1.08, rotate: -6, tilt: -1.0 },
+  { id: 1, top: 18, left: 66, vw: 34, ratio: 0.96, rotate: 5,  tilt: 0.8 },
+  { id: 2, top: 48, left: 10, vw: 36, ratio: 1.10, rotate: -7, tilt: -0.8 },
+  { id: 3, top: 74, left: 68, vw: 32, ratio: 0.98, rotate: 6,  tilt: 0.6 },
 ];
 
 const chooseFixedSlots = (width: number): Slot[] => {
