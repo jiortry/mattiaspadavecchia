@@ -124,8 +124,8 @@ const Snowfall = () => {
           }
         }
 
-        // fade in initially for elegance
-        if (f.opacity < 0.9) f.opacity = Math.min(0.9, f.opacity + 0.02);
+        // fade in initially for elegance (reduced max opacity by ~20% for subtler effect)
+        if (f.opacity < 0.72) f.opacity = Math.min(0.72, f.opacity + 0.02);
 
         // cleanup: if off-screen bottom and not landed, remove after old
         const h = canvas.height / dpr;
