@@ -53,6 +53,8 @@ const imagePaths: string[] = Array.from({ length: 7 }, (_, i) => `/panettoni${i 
 
 const BackgroundPhotoPlaceholders = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [mobileStagePx, setMobileStagePx] = useState<number>(0);
   const lockedMobileRef = useRef<boolean>(false);
   const initialViewportRef = useRef<{ width: number; height: number }>({ width: 1280, height: 800 });
   const [hidden, setHidden] = useState<Record<number, boolean>>({});
@@ -65,6 +67,11 @@ const BackgroundPhotoPlaceholders = () => {
     // Lock mobile layout for the whole session so images never move on mobile
     lockedMobileRef.current = initialLabel === "m";
     initialViewportRef.current = { width, height };
+    setIsMobile(lockedMobileRef.current);
+    // stage height for mobile to ensure images end naturally before footer
+    if (lockedMobileRef.current) {
+      setMobileStagePx(Math.round(height * 1.6));
+    }
     setSlots(chooseFixedSlots(width));
 
     const onResize = () => {
@@ -84,8 +91,8 @@ const BackgroundPhotoPlaceholders = () => {
 
   return (
     <div
-      className="pointer-events-none fixed inset-0"
-      style={{ zIndex: 1 }}
+      className="pointer-events-none inset-0"
+      style={{ zIndex: 1, position: isMobile ? "absolute" as const : "fixed" as const, height: isMobile ? `${mobileStagePx}px` : undefined }}
       aria-hidden
     >
       {slots.map((slot) => {

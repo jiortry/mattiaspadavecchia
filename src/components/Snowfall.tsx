@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface Snowflake {
   x: number;
@@ -19,11 +19,26 @@ const Snowfall = () => {
   const animationRef = useRef<number | null>(null);
   const obstacleCacheRef = useRef<{ at: number; rects: Array<{ left: number; right: number; top: number }> }>({ at: 0, rects: [] });
   const dpr = useMemo(() => (typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1), []);
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobileStagePx, setMobileStagePx] = useState(0);
 
   useEffect(() => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const mobile = width < 640;
+    setIsMobile(mobile);
+    if (mobile) setMobileStagePx(Math.round(height * 1.6));
+
     const canvas = document.createElement("canvas");
-    canvas.style.position = "fixed";
-    canvas.style.inset = "0";
+    canvas.style.position = mobile ? "absolute" : "fixed";
+    if (mobile) {
+      canvas.style.top = "0";
+      canvas.style.left = "0";
+      canvas.style.right = "0";
+      canvas.style.height = `${Math.round(height * 1.6)}px`;
+    } else {
+      canvas.style.inset = "0";
+    }
     canvas.style.pointerEvents = "none";
     canvas.style.zIndex = "50"; // render above content, pointer-events remain none
     canvasRef.current = canvas;
@@ -33,12 +48,22 @@ const Snowfall = () => {
     if (!ctx) return () => {};
 
     const resize = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-      canvas.style.width = width + "px";
-      canvas.style.height = height + "px";
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const mobileNow = w < 640;
+      if (mobileNow) {
+        // lock mobile config; avoid recompute during scroll/orientation
+        canvas.width = Math.floor(w * dpr);
+        const stage = Math.round(h * 1.6);
+        canvas.height = Math.floor(stage * dpr);
+        canvas.style.width = w + "px";
+        canvas.style.height = stage + "px";
+      } else {
+        canvas.width = Math.floor(w * dpr);
+        canvas.height = Math.floor(h * dpr);
+        canvas.style.width = w + "px";
+        canvas.style.height = h + "px";
+      }
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
