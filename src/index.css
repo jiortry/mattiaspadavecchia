@@ -124,3 +124,26 @@ All colors MUST be HSL.
     font-family: 'Cormorant Garamond', serif;
   }
 }
+
+/* Elegant themed scrollbar for dialogs and scrollable areas */
+@layer utilities {
+  .scrollbar-elegant {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: hsl(var(--primary)) transparent; /* Firefox */
+  }
+  .scrollbar-elegant::-webkit-scrollbar {
+    width: 10px;
+  }
+  .scrollbar-elegant::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-elegant::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, hsl(var(--primary)), hsl(var(--accent)));
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  .scrollbar-elegant::-webkit-scrollbar-thumb:hover {
+    filter: brightness(1.05);
+  }
+}
