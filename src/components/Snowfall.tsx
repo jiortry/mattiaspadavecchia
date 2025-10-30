@@ -53,7 +53,8 @@ const Snowfall = () => {
 
     const maxFlakes = 140; // light effect
     const spawnIntervalMs = 120; // spawn cadence
-    const gravity = 0.015; // gentler -> slower fall
+    const speedFactor = 0.8; // 20% slower fall
+    const gravity = 0.015 * speedFactor; // gentler -> slower fall
     const windBase = 0.02; // subtle horizontal drift
     const fadeAfterMs = 8000; // start fading after this time when landed
     const maxAgeMs = 14000; // remove after this
@@ -114,7 +115,7 @@ const Snowfall = () => {
         x: Math.random() * w,
         y: -radius - 4,
         radius,
-        vy: Math.random() * 0.12 + 0.04, // slower initial descent
+        vy: (Math.random() * 0.12 + 0.04) * speedFactor, // 20% slower initial descent
         vx: (Math.random() - 0.5) * 0.2,
         opacity: 0.0,
         bornAt: now,
