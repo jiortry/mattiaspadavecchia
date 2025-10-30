@@ -28,7 +28,7 @@ interface Panettone {
 const panettoni: Panettone[] = [
   {
     name: "Pistacchio",
-    prices: { kg1: "€45,00", half: "€28,00" },
+    prices: { kg1: "€48,00", half: "€28,00" },
     ingredients: [
       "Farina di frumento tenero tipo \"0\"",
       "Burro da panna",
