@@ -221,7 +221,7 @@ const Index = () => {
           <h1
             className="inline-block mx-auto text-5xl md:text-7xl font-elegant font-light text-foreground leading-tight"
           >
-            Panettoni
+            <span className="block">Panettoni</span>
             <span className="mt-2 inline-block">
               <span className="block text-primary italic font-normal">Artigianali</span>
               <span className="block italic text-foreground/80 text-sm md:text-base -mt-1 text-right">da Mattia Spadavecchia</span>
