@@ -90,7 +90,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 relative">
       <SnowEffect />
       {/* Hero Section */}
       <header className="container mx-auto px-4 py-16 md:py-24">
