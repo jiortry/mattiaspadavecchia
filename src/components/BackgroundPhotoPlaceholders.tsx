@@ -12,7 +12,7 @@ type Slot = {
 
 const randomBetween = (min: number, max: number) => Math.random() * (max - min) + min;
 
-const generateSlots = (count = 8): Slot[] => {
+const generateSlots = (count = 7): Slot[] => {
   const slots: Slot[] = [];
   for (let i = 0; i < count; i++) {
     const vw = randomBetween(26, 40); // large, responsive footprint
@@ -31,14 +31,14 @@ const generateSlots = (count = 8): Slot[] => {
   return slots;
 };
 
-const imagePaths: string[] = Array.from({ length: 8 }, (_, i) => `/bg-${i + 1}.png`);
+const imagePaths: string[] = Array.from({ length: 7 }, (_, i) => `/panettoni${i + 1}.png`);
 
 const BackgroundPhotoPlaceholders = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [hidden, setHidden] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
-    setSlots(generateSlots(8));
+    setSlots(generateSlots(7));
   }, []);
 
   return (
