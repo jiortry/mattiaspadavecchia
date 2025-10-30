@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Snowflake {
   id: number;
@@ -33,20 +33,12 @@ const SnowEffect = () => {
   const [settled, setSettled] = useState<SettledFlake[]>([]);
   const anchorsRef = useRef<Map<string, AnchorInfo>>(new Map());
   const scrollYRef = useRef(0);
+  const rafIdRef = useRef<number | null>(null);
 
   const updateAnchors = () => {
     const map = new Map<string, AnchorInfo>();
-    const nodes = Array.from(
-      document.querySelectorAll(
-        [
-          '[data-snow-anchor]',
-          'h1, h2, h3, p',
-          'button, a',
-          '[class*="card" i]',
-          'header, footer',
-        ].join(', ')
-      )
-    );
+    // Limit anchors STRICTLY to the 8 background photos
+    const nodes = Array.from(document.querySelectorAll('[data-snow-anchor="bgphoto"]'));
     nodes.forEach((el) => {
       const type = el.getAttribute('data-snow-anchor') as "panettone" | "instagram" | "bgphoto" | null;
       const id = el.getAttribute('data-snow-id') || undefined;
@@ -66,16 +58,16 @@ const SnowEffect = () => {
     const createSnowflake = () => {
       const now = Date.now();
       const layer = Math.random() < 0.2 ? 0 : Math.random() < 0.6 ? 1 : 2; // more in front
-      const baseSpeed = layer === 0 ? 0.3 : layer === 1 ? 0.6 : 1.0;
-      const size = (Math.random() * 4 + 2) * (layer === 0 ? 0.7 : layer === 1 ? 1 : 1.3);
+      const baseSpeed = layer === 0 ? 0.18 : layer === 1 ? 0.32 : 0.52; // gentler
+      const size = (Math.random() * 2 + 1.5) * (layer === 0 ? 0.7 : layer === 1 ? 1 : 1.2);
       return {
         id: Math.random(),
         x: Math.random() * window.innerWidth,
         y: -20,
         size,
-        opacity: Math.random() * 0.25 + 0.65 + (layer === 2 ? 0.1 : 0),
-        speed: baseSpeed + Math.random() * 0.6,
-        drift: Math.random() * 2 - 1,
+        opacity: Math.random() * 0.2 + 0.55 + (layer === 2 ? 0.08 : 0),
+        speed: baseSpeed + Math.random() * 0.25,
+        drift: Math.random() * 1.2 - 0.6,
         rotation: Math.random() * 360,
         createdAt: now,
         layer,
@@ -93,71 +85,97 @@ const SnowEffect = () => {
     };
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    // Genera fiocchi decorativi periodicamente (no caduta)
-    const intervalId = setInterval(() => {
+    // Gentle generation and animation with collision and settling only on bg photos
+    const maxFlakes = 60;
+
+    const loop = () => {
+      // spawn a new flake occasionally, capped
       setSnowflakes((prev) => {
-        // Rimuovi fiocchi vecchi (più di 20 secondi)
         const now = Date.now();
-        const filtered = prev.filter(
-          (flake) =>
-            now - flake.createdAt < 20000
-        );
-        
-        // Aggiungi nuovi fiocchi se ce ne sono pochi
-        if (filtered.length < 80) {
-          return [...filtered, createSnowflake()];
+        let next = prev
+          .filter((f) => now - f.createdAt < 30000 && f.y < window.innerHeight + 40);
+        if (next.length < maxFlakes && Math.random() < 0.35) {
+          next = [...next, createSnowflake()];
         }
-        return filtered;
+        return next;
       });
-      // Accumulo leggero: aggiungi sporadicamente sui vari anchor
+
       const anchors = anchorsRef.current;
-      if (anchors.size > 0) {
+      const anchorRects: Array<{ key: string; rect: DOMRect }> = [];
+      for (const [key, info] of anchors.entries()) {
+        if (info.type === 'bgphoto') {
+          anchorRects.push({ key, rect: (info.el as HTMLElement).getBoundingClientRect() });
+        }
+      }
+
+      setSnowflakes((prev) => {
         const now = Date.now();
-        setSettled((prevSet) => {
-          const updated = [...prevSet];
-          for (const [key, info] of anchors.entries()) {
-            const existingForAnchor = updated.filter((s) => s.anchorKey === key);
-            const limit = info.type === 'instagram' ? 14 : info.type === 'bgphoto' ? 40 : 28;
-            const chance = info.type === 'instagram' ? 0.08 : info.type === 'bgphoto' ? 0.12 : 0.05;
-            if (existingForAnchor.length < limit && Math.random() < chance) {
-              const rect = (info.el as HTMLElement).getBoundingClientRect();
-              const localX = Math.max(0, Math.min(rect.width, Math.random() * rect.width));
-              updated.push({
+        const updated: Snowflake[] = [];
+        const newSettled: SettledFlake[] = [];
+
+        for (const flake of prev) {
+          // update movement
+          const y = flake.y + flake.speed;
+          const x = flake.x + Math.sin((flake.y + scrollYRef.current) * 0.012) * flake.drift;
+          const rotation = flake.rotation + 0.35;
+
+          let didSettle = false;
+          // collision with top edge of any bgphoto rect
+          for (const ar of anchorRects) {
+            const left = ar.rect.left;
+            const right = ar.rect.right;
+            const top = ar.rect.top;
+            // approximate flake within horizontal bounds and near top edge
+            if (x >= left && x <= right && y >= top - 2 && y <= top + 4) {
+              const localX = Math.max(0, Math.min(ar.rect.width, x - left));
+              newSettled.push({
                 id: Math.random(),
-                anchorKey: key,
+                anchorKey: ar.key,
                 localX,
-                size: Math.max(2, Math.random() * 4 + 2),
+                size: Math.max(1.5, Math.min(4, flake.size + Math.random() * 1.2)),
                 createdAt: now,
-                lifespanMs: info.type === 'instagram' ? 12000 : info.type === 'bgphoto' ? 20000 : 22000,
+                lifespanMs: 16000 + Math.floor(Math.random() * 8000),
               });
+              didSettle = true;
+              break;
             }
           }
-          return updated;
-        });
-      }
-    }, 200);
 
-    // Anima i fiocchi (solo rotazione/jitter; posizione legata allo scroll)
-    const animationId = setInterval(() => {
-      setSnowflakes((prev) => {
-        return prev.map((flake) => ({
-          ...flake,
-          x: flake.x + Math.sin((flake.y + scrollYRef.current) * 0.01) * flake.drift,
-          rotation: flake.rotation + 0.5,
-          opacity:
-            Date.now() - flake.createdAt > 16000
-              ? Math.max(0, flake.opacity - 0.015)
-              : flake.opacity,
-        }));
+          if (!didSettle && y < window.innerHeight + 30) {
+            updated.push({ ...flake, x, y, rotation });
+          }
+        }
+
+        if (newSettled.length) {
+          setSettled((prevS) => {
+            const merged = [...prevS, ...newSettled];
+            // softly cap per anchor to avoid invasiveness
+            const counts = new Map<string, number>();
+            const pruned: SettledFlake[] = [];
+            for (const s of merged) {
+              const c = counts.get(s.anchorKey) || 0;
+              if (c < 28) {
+                pruned.push(s);
+                counts.set(s.anchorKey, c + 1);
+              }
+            }
+            return pruned.filter((s) => Date.now() - s.createdAt < s.lifespanMs);
+          });
+        }
+
+        return updated;
       });
 
-      // decay dei fiocchi depositati
+      // fade out settled over time
       setSettled((prev) => prev.filter((s) => Date.now() - s.createdAt < s.lifespanMs));
-    }, 50);
+
+      rafIdRef.current = window.requestAnimationFrame(loop);
+    };
+
+    rafIdRef.current = window.requestAnimationFrame(loop);
 
     return () => {
-      clearInterval(intervalId);
-      clearInterval(animationId);
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
       window.removeEventListener('scroll', onScroll);
       anchorsObs.disconnect();
     };
