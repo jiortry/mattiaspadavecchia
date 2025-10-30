@@ -16,6 +16,7 @@ const PanettonCard = ({ name, price, onClick, index }: PanettonCardProps) => {
         isEven ? "md:translate-x-8" : "md:-translate-x-8"
       } hover:scale-[1.02]`}
       onClick={onClick}
+      data-snow-obstacle="true"
     >
       <CardContent className="p-0">
         <div className="p-6 space-y-2">

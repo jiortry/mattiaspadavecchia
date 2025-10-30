@@ -184,7 +184,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 relative">
+    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 relative z-10">
       {/* Hero Section */}
       <header className="container mx-auto px-4 py-16 md:py-24">
         <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
