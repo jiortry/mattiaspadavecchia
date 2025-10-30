@@ -56,8 +56,6 @@ const BackgroundPhotoPlaceholders = () => {
             aspectRatio: `${slot.ratio}`,
             transform: `rotate(${slot.rotate}deg) skewX(${slot.tilt}deg)`,
           }}
-          data-snow-anchor="bgphoto"
-          data-snow-id={`bg-${slot.id}`}
         >
           <div className="w-full h-full bg-gradient-to-br from-white/8 to-white/3" />
         </div>

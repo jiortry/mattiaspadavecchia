@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Instagram } from "lucide-react";
 import PanettonCard from "@/components/PanettonCard";
 import PanettonDialog from "@/components/PanettonDialog";
-import SnowEffect from "@/components/SnowEffect";
 import { Button } from "@/components/ui/button";
 import BackgroundPhotoPlaceholders from "@/components/BackgroundPhotoPlaceholders";
 
@@ -12,6 +11,17 @@ interface Panettone {
   ingredients: string[];
   description: string;
   imagePlaceholder: string;
+  allergens: string[];
+  nutrition: {
+    energyKcal: string;
+    protein: string;
+    fat: string;
+    saturatedFat: string;
+    carbs: string;
+    sugars: string;
+    fiber?: string;
+    salt?: string;
+  };
 }
 
 const panettoni: Panettone[] = [
@@ -34,6 +44,16 @@ const panettoni: Panettone[] = [
     ],
     description: "Impasto soffice e profumato con ricca pasta di pistacchio e granella croccante.",
     imagePlaceholder: "Foto panettone pistacchio",
+    allergens: ["Glutine", "Uova", "Latte", "Soia"],
+    nutrition: {
+      energyKcal: "470 kcal",
+      protein: "8 g",
+      fat: "27 g",
+      saturatedFat: "10-12 g",
+      carbs: "45 g",
+      sugars: "27-30 g",
+      fiber: "2,5 g",
+    },
   },
   {
     name: "Artigianale",
@@ -51,6 +71,16 @@ const panettoni: Panettone[] = [
     ],
     description: "Panettone tradizionale artigianale con lunga lievitazione naturale e aromi genuini.",
     imagePlaceholder: "Foto panettone artigianale",
+    allergens: ["Glutine", "Uova", "Latte", "Soia"],
+    nutrition: {
+      energyKcal: "341 kcal",
+      protein: "5,5 g",
+      fat: "14,4 g",
+      saturatedFat: "7,9 g",
+      carbs: "48 g",
+      sugars: "26,8 g",
+      fiber: "1,4 g",
+    },
   },
   {
     name: "Cioccolato Bianco e Limone",
@@ -70,6 +100,16 @@ const panettoni: Panettone[] = [
     ],
     description: "Equilibrio tra la dolcezza del cioccolato bianco e la freschezza del limone.",
     imagePlaceholder: "Foto panettone cioccolato bianco e limone",
+    allergens: ["Glutine", "Uova", "Latte", "Soia"],
+    nutrition: {
+      energyKcal: "430 kcal",
+      protein: "6 g",
+      fat: "22 g",
+      saturatedFat: "12 g",
+      carbs: "48 g",
+      sugars: "30-33 g",
+      fiber: "1,5 g",
+    },
   },
   {
     name: "Caffè e Arancia",
@@ -91,6 +131,17 @@ const panettoni: Panettone[] = [
     ],
     description: "Note intense di caffè incontrano l’arancia candita in un impasto soffice.",
     imagePlaceholder: "Foto panettone caffè e arancia",
+    allergens: ["Glutine", "Uova", "Latte", "Soia"],
+    nutrition: {
+      energyKcal: "355 kcal",
+      protein: "5,5 g",
+      fat: "16 g",
+      saturatedFat: "8,5 g",
+      carbs: "48 g",
+      sugars: "36 g",
+      fiber: "3 g",
+      salt: "0,7 g",
+    },
   },
   {
     name: "Cioccolato Fondente",
@@ -110,6 +161,16 @@ const panettoni: Panettone[] = [
     ],
     description: "Variante golosa con scaglie di cioccolato fondente e profumo di cacao.",
     imagePlaceholder: "Foto panettone cioccolato fondente",
+    allergens: ["Glutine", "Uova", "Latte", "Soia"],
+    nutrition: {
+      energyKcal: "460 kcal",
+      protein: "7 g",
+      fat: "23 g",
+      saturatedFat: "12-14 g",
+      carbs: "50 g",
+      sugars: "28-32 g",
+      fiber: "2 g",
+    },
   },
 ];
 
@@ -125,7 +186,6 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 relative">
       <BackgroundPhotoPlaceholders />
-      <SnowEffect />
       {/* Hero Section */}
       <header className="container mx-auto px-4 py-16 md:py-24">
         <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
@@ -173,7 +233,6 @@ const Index = () => {
           <Button
             size="lg"
             className="bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground font-elegant text-lg px-8 py-6 rounded-full shadow-[var(--shadow-elegant)] transition-all duration-300 hover:scale-105"
-            data-snow-anchor="instagram"
             onClick={() => window.open('https://instagram.com/m.spd_', '_blank')}
           >
             <Instagram className="mr-2 h-5 w-5" />
