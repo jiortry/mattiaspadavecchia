@@ -62,8 +62,18 @@ const Snowfall = () => {
       const rects: Array<{ left: number; right: number; top: number }> = [];
       nodes.forEach((el) => {
         const r = el.getBoundingClientRect();
-        // Slight inward shrink to avoid touching borders harshly
-        rects.push({ left: r.left + 8, right: r.right - 8, top: r.top + 4 });
+        const cs = window.getComputedStyle(el);
+        const fontSize = parseFloat(cs.fontSize || "16");
+        let lineHeight = cs.lineHeight === "normal" ? NaN : parseFloat(cs.lineHeight || "0");
+        if (!isFinite(lineHeight) || lineHeight <= 0) {
+          // Fallback typical ratios for headings
+          lineHeight = fontSize * 1.25;
+        }
+        const verticalInset = Math.max(0, (lineHeight - fontSize) / 2);
+        // No vertical bias: use text line top by adding inset from element top
+        const top = r.top + verticalInset;
+        // Mild horizontal shrink to avoid edge clipping
+        rects.push({ left: r.left + 4, right: r.right - 4, top });
       });
       return rects;
     };
@@ -112,7 +122,7 @@ const Snowfall = () => {
           for (let k = 0; k < obstacles.length; k++) {
             const o = obstacles[k];
             if (f.x >= o.left && f.x <= o.right) {
-              if (f.y + f.radius >= o.top && f.y + f.radius <= o.top + 6) {
+              if (f.y + f.radius >= o.top && f.y + f.radius <= o.top + 3) {
                 f.y = o.top - f.radius;
                 f.vy = 0;
                 f.vx *= 0.2;
