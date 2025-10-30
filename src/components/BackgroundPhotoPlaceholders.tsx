@@ -71,8 +71,8 @@ const BackgroundPhotoPlaceholders = () => {
         document.body.scrollHeight
       );
       const isMobile = (typeof window !== "undefined" ? window.innerWidth : width) < 640;
-      // layer same height as page for mobile (matching other layers)
-      setContainerHeight(h);
+      // layer slightly reduced for mobile
+      setContainerHeight(isMobile ? Math.round(h * 0.9) : h);
     };
     computeHeight();
 
@@ -96,7 +96,7 @@ const BackgroundPhotoPlaceholders = () => {
           document.body.scrollHeight
         );
         const isMobileNow = w < 640;
-        setContainerHeight(h);
+        setContainerHeight(isMobileNow ? Math.round(h * 0.9) : h);
       }, 0);
     };
     window.addEventListener("resize", onResize);
@@ -107,7 +107,7 @@ const BackgroundPhotoPlaceholders = () => {
         document.body.scrollHeight
       );
       const isMobileNow = (typeof window !== "undefined" ? window.innerWidth : width) < 640;
-      setContainerHeight(h);
+      setContainerHeight(isMobileNow ? Math.round(h * 0.9) : h);
     });
     try {
       ro.observe(document.body);
