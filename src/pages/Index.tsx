@@ -4,6 +4,7 @@ import PanettonCard from "@/components/PanettonCard";
 import PanettonDialog from "@/components/PanettonDialog";
 import SnowEffect from "@/components/SnowEffect";
 import { Button } from "@/components/ui/button";
+import BackgroundPhotoPlaceholders from "@/components/BackgroundPhotoPlaceholders";
 
 interface Panettone {
   name: string;
@@ -91,6 +92,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 relative">
+      <BackgroundPhotoPlaceholders />
       <SnowEffect />
       {/* Hero Section */}
       <header className="container mx-auto px-4 py-16 md:py-24">
@@ -105,9 +107,9 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Panettoni Grid */}
+      {/* Panettoni Premium List */}
       <main className="container mx-auto px-4 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-6xl mx-auto">
+        <div className="max-w-3xl mx-auto space-y-8 md:space-y-10">
           {panettoni.map((panettone, index) => (
             <div
               key={panettone.name}
