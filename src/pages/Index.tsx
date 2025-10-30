@@ -257,7 +257,7 @@ const Index = () => {
             <h2
               className="inline-block mx-auto text-3xl md:text-4xl font-elegant font-light text-foreground"
             >
-              Seguici su Instagram
+              Seguimi su Instagram
             </h2>
             <p className="text-muted-foreground italic">
               Per ordini e informazioni
