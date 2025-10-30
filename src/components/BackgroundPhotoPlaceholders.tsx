@@ -5,8 +5,8 @@ type Slot = {
   top: number; // in vh can be negative or >100
   left: number; // in vw can be negative or >100
   rotate: number; // deg
-  width: number; // px
-  height: number; // px
+  vw: number; // preferred width in vw for responsiveness
+  ratio: number; // width/height ratio
   tilt: number; // additional minor jitter for premium look
 };
 
@@ -15,16 +15,16 @@ const randomBetween = (min: number, max: number) => Math.random() * (max - min) 
 const generateSlots = (count = 8): Slot[] => {
   const slots: Slot[] = [];
   for (let i = 0; i < count; i++) {
-    const width = Math.round(randomBetween(140, 260));
-    const height = Math.round(width * randomBetween(0.8, 1.2));
+    const vw = randomBetween(26, 40); // large, responsive footprint
+    const ratio = randomBetween(0.9, 1.15);
     slots.push({
       id: i,
       // allow offscreen placement
       top: randomBetween(-15, 105),
       left: randomBetween(-12, 106),
       rotate: randomBetween(-12, 12),
-      width,
-      height,
+      vw,
+      ratio,
       tilt: randomBetween(-3, 3),
     });
   }
@@ -51,8 +51,9 @@ const BackgroundPhotoPlaceholders = () => {
           style={{
             top: `${slot.top}vh`,
             left: `${slot.left}vw`,
-            width: `${slot.width}px`,
-            height: `${slot.height}px`,
+            // Large but gently responsive: min 260px, prefer vw, cap at 720px
+            width: `clamp(260px, ${slot.vw}vw, 720px)`,
+            aspectRatio: `${slot.ratio}`,
             transform: `rotate(${slot.rotate}deg) skewX(${slot.tilt}deg)`,
           }}
         >
