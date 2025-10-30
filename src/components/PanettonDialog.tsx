@@ -53,19 +53,52 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
                 {panettone.prices?.kg1 && (
                   <tr className="border-b border-border/30">
                     <td className="px-4 py-3 text-muted-foreground">1 kg</td>
-                    <td className="px-4 py-3 text-right font-elegant text-foreground">{panettone.prices.kg1}</td>
+                    <td className="px-2 py-2 text-right">
+                      <button
+                        className="inline-flex items-center gap-2 rounded-full border border-orange-400/70 bg-orange-500/5 hover:bg-orange-500/10 text-orange-600 px-3 py-1.5 font-elegant shadow-sm transition-colors"
+                        onClick={() => {
+                          const msg = `Vorrei prenotare un panettone ${panettone.name} 1kg. Grazie mille`;
+                          const href = `https://wa.me/4549999617?text=${encodeURIComponent(msg)}`;
+                          window.open(href, "_blank");
+                        }}
+                      >
+                        {panettone.prices.kg1}
+                      </button>
+                    </td>
                   </tr>
                 )}
                 {panettone.prices?.half && (
                   <tr>
                     <td className="px-4 py-3 text-muted-foreground">Mezzo kg</td>
-                    <td className="px-4 py-3 text-right font-elegant text-foreground">{panettone.prices.half}</td>
+                    <td className="px-2 py-2 text-right">
+                      <button
+                        className="inline-flex items-center gap-2 rounded-full border border-orange-400/70 bg-orange-500/5 hover:bg-orange-500/10 text-orange-600 px-3 py-1.5 font-elegant shadow-sm transition-colors"
+                        onClick={() => {
+                          const msg = `Vorrei prenotare un panettone ${panettone.name} mezzo kg. Grazie mille`;
+                          const href = `https://wa.me/4549999617?text=${encodeURIComponent(msg)}`;
+                          window.open(href, "_blank");
+                        }}
+                      >
+                        {panettone.prices.half}
+                      </button>
+                    </td>
                   </tr>
                 )}
                 {!panettone.prices && panettone.price && (
                   <tr>
                     <td className="px-4 py-3 text-muted-foreground">Prezzo</td>
-                    <td className="px-4 py-3 text-right font-elegant text-foreground">{panettone.price}</td>
+                    <td className="px-2 py-2 text-right">
+                      <button
+                        className="inline-flex items-center gap-2 rounded-full border border-orange-400/70 bg-orange-500/5 hover:bg-orange-500/10 text-orange-600 px-3 py-1.5 font-elegant shadow-sm transition-colors"
+                        onClick={() => {
+                          const msg = `Vorrei prenotare un panettone ${panettone.name}. Grazie mille`;
+                          const href = `https://wa.me/4549999617?text=${encodeURIComponent(msg)}`;
+                          window.open(href, "_blank");
+                        }}
+                      >
+                        {panettone.price}
+                      </button>
+                    </td>
                   </tr>
                 )}
               </tbody>
@@ -76,7 +109,7 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
           <div className="flex items-center gap-3">
             {panettone.prices?.kg1 && (
               <button
-                className="rounded-full border border-border/50 px-4 py-2 text-sm font-elegant hover:bg-primary/10 transition-colors"
+                className="rounded-full border border-orange-400/80 bg-orange-500/10 hover:bg-orange-500/15 text-orange-700 px-4 py-2 text-sm font-elegant shadow-[0_2px_10px_rgba(255,149,0,0.15)] transition-colors"
                 onClick={() => {
                   const msg = `Vorrei prenotare un panettone ${panettone.name} 1kg. Grazie mille`;
                   const href = `https://wa.me/4549999617?text=${encodeURIComponent(msg)}`;
@@ -88,7 +121,7 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
             )}
             {panettone.prices?.half && (
               <button
-                className="rounded-full border border-border/50 px-4 py-2 text-sm font-elegant hover:bg-primary/10 transition-colors"
+                className="rounded-full border border-orange-400/80 bg-orange-500/10 hover:bg-orange-500/15 text-orange-700 px-4 py-2 text-sm font-elegant shadow-[0_2px_10px_rgba(255,149,0,0.15)] transition-colors"
                 onClick={() => {
                   const msg = `Vorrei prenotare un panettone ${panettone.name} mezzo kg. Grazie mille`;
                   const href = `https://wa.me/4549999617?text=${encodeURIComponent(msg)}`;
