@@ -34,10 +34,10 @@ Landing page elegante per panettoni artigianali da Mattia Spadavecchia. Un sito 
 
 ```bash
 # 1. Clona il repository
-git clone https://github.com/jiortry/dolce-desire-landing.git
+git clone https://github.com/jiortry/mattiaspadavecchia.git
 
 # 2. Naviga nella directory del progetto
-cd dolce-desire-landing
+cd mattiaspadavecchia
 
 # 3. Installa le dipendenze
 npm install
@@ -74,7 +74,7 @@ npm run lint
 ## 📱 Struttura del Progetto
 
 ```
-dolce-desire-landing/
+mattiaspadavecchia/
 ├── public/                 # Asset statici
 │   ├── panettoni*.png     # Immagini dei panettoni
 │   └── favicon.ico
