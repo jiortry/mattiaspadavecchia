@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Instagram, MessageCircle } from "lucide-react";
+import { Instagram, MessageCircle, Globe } from "lucide-react";
 import PanettonCard from "@/components/PanettonCard";
 import PanettonDialog from "@/components/PanettonDialog";
 import { Button } from "@/components/ui/button";
@@ -286,6 +286,21 @@ const Index = () => {
             >
               <MessageCircle className="mr-2 h-5 w-5" />
               Scrivimi per più informazioni
+            </Button>
+          </div>
+          <div className="mt-12 pt-8 border-t border-border/30">
+            <Button
+              size="lg"
+              variant="ghost"
+              className="text-muted-foreground hover:text-foreground font-elegant text-sm md:text-base px-6 py-4 transition-all duration-300 hover:scale-[1.02]"
+              onClick={() => {
+                const msg = 'Ciao, ho visto il sito di Mattia, sarei interessato ad un sito web.';
+                const href = `https://wa.me/393519925868?text=${encodeURIComponent(msg)}`;
+                window.open(href, '_blank');
+              }}
+            >
+              <Globe className="mr-2 h-4 w-4" />
+              clicca per creare il tuo sito web
             </Button>
           </div>
         </div>
