@@ -64,6 +64,7 @@ const BackgroundPhotoPlaceholders = () => {
     const width = typeof window !== "undefined" ? window.innerWidth : 1280;
     setViewportWidth(width);
     setSlots(chooseFixedSlots(width));
+    
     // match container to full page height so percentage tops distribute on full layer
     const computeHeight = () => {
       const h = Math.max(
@@ -76,19 +77,25 @@ const BackgroundPhotoPlaceholders = () => {
     };
     computeHeight();
 
+    // Track current breakpoint to detect changes
+    let currentBreakpoint = width < 640 ? "m" : width < 1024 ? "t" : "d";
+    
     // Update layout only when crossing breakpoints; avoid jitter on minor resizes
     const onResize = () => {
       const w = window.innerWidth;
-      const prev = slots;
-      const current = chooseFixedSlots(w);
-      // Determine current breakpoint label for prev and current
-      const label = (x: number) => (x < 640 ? "m" : x < 1024 ? "t" : "d");
-      const prevLabel = label(prev.length ? window.innerWidth : w);
-      const currLabel = label(w);
-      if (prevLabel !== currLabel) {
-        setSlots(current);
-      }
+      // Always update viewportWidth for accurate isMobile check
       setViewportWidth(w);
+      
+      // Determine current breakpoint
+      const label = (x: number) => (x < 640 ? "m" : x < 1024 ? "t" : "d");
+      const newBreakpoint = label(w);
+      
+      // Only update slots when breakpoint changes
+      if (newBreakpoint !== currentBreakpoint) {
+        currentBreakpoint = newBreakpoint;
+        setSlots(chooseFixedSlots(w));
+      }
+      
       // update container height on resize (orientation changes / dynamic UI)
       setTimeout(() => {
         const h = Math.max(
@@ -100,19 +107,24 @@ const BackgroundPhotoPlaceholders = () => {
       }, 0);
     };
     window.addEventListener("resize", onResize);
+    
     // observe body size changes (content expansion)
     const ro = new ResizeObserver(() => {
+      const w = typeof window !== "undefined" ? window.innerWidth : width;
       const h = Math.max(
         document.documentElement.scrollHeight,
         document.body.scrollHeight
       );
-      const isMobileNow = (typeof window !== "undefined" ? window.innerWidth : width) < 640;
+      const isMobileNow = w < 640;
       setContainerHeight(isMobileNow ? Math.round(h * 0.9) : h);
     });
     try {
       ro.observe(document.body);
     } catch {}
-    return () => window.removeEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      ro.disconnect();
+    };
   }, []);
 
   return (
@@ -125,17 +137,29 @@ const BackgroundPhotoPlaceholders = () => {
         const src = imagePaths[slot.id] || "";
         const isHidden = hidden[slot.id];
         const isMobile = viewportWidth < 640;
-        // Distribute vertically across page height on mobile - more compact spacing
-        const topValue = isMobile ? `${((slot.id + 0.5) / 7) * 100}%` : `${slot.top}vh`;
-        // More left shift for panettoni on the left side (left < 30vw)
+        
+        // On mobile: use uniform distribution based on slot.id, but respect the relative positioning
+        // This ensures all 7 images are evenly distributed across the page height
+        // On desktop/tablet: use the explicit top values from FIXED_SLOTS
+        const topValue = isMobile 
+          ? `${((slot.id + 0.5) / 7) * 100}%` 
+          : `${slot.top}vh`;
+        
+        // On mobile: adjust left positioning to prevent images from going off-screen
+        // More aggressive shift for left-side images (slot.left < 30vw)
+        // Subtle shift for right-side images to maintain balance
         const leftOffset = isMobile ? (slot.left < 30 ? -12 : -4) : 0;
+        const calculatedLeft = isMobile 
+          ? Math.max(0, Math.min(100 - slot.vw, slot.left + leftOffset)) 
+          : slot.left;
+        
         return (
           <div
             key={slot.id}
             className="absolute"
             style={{
               top: topValue,
-              left: isMobile ? `${Math.max(0, slot.left + leftOffset)}vw` : `${slot.left}vw`,
+              left: `${calculatedLeft}vw`,
               width: `clamp(260px, ${slot.vw}vw, 720px)`,
               aspectRatio: `${slot.ratio}`,
               transform: `rotate(${slot.rotate}deg) skewX(${slot.tilt}deg)`,
