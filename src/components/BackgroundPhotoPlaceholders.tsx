@@ -153,13 +153,19 @@ const BackgroundPhotoPlaceholders = () => {
           ? Math.max(0, Math.min(100 - slot.vw, slot.left + leftOffset)) 
           : slot.left;
         
+        // On mobile: shift left-side images (slot.left < 30) 30px more to the left
+        const isLeftSide = slot.left < 30;
+        const leftValue = isMobile && isLeftSide
+          ? `calc(${calculatedLeft}vw - 30px)`
+          : `${calculatedLeft}vw`;
+        
         return (
           <div
             key={slot.id}
             className="absolute"
             style={{
               top: topValue,
-              left: `${calculatedLeft}vw`,
+              left: leftValue,
               width: `clamp(260px, ${slot.vw}vw, 720px)`,
               aspectRatio: `${slot.ratio}`,
               transform: `rotate(${slot.rotate}deg) skewX(${slot.tilt}deg)`,
