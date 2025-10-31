@@ -292,7 +292,7 @@ const Index = () => {
             <Button
               size="lg"
               variant="ghost"
-              className="text-muted-foreground hover:text-foreground font-elegant text-sm md:text-base px-6 py-4 transition-all duration-300 hover:scale-[1.02]"
+              className="text-muted-foreground hover:text-foreground font-sans font-bold text-base md:text-lg px-6 py-4 transition-all duration-300 hover:scale-[1.02]"
               onClick={() => {
                 const msg = 'Ciao, ho visto il sito di Mattia, sarei interessato ad un sito web.';
                 const href = `https://wa.me/393519925868?text=${encodeURIComponent(msg)}`;
@@ -300,7 +300,7 @@ const Index = () => {
               }}
             >
               <Globe className="mr-2 h-4 w-4" />
-              clicca per creare il tuo sito web
+              Clicca per creare il tuo sito web
             </Button>
           </div>
         </div>
