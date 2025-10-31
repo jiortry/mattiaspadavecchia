@@ -1,6 +1,6 @@
 # Dolce Desire Landing - Panettoni Artigianali
 
-Landing page elegante per panettoni artigianali da Mattia Spadavecchia. Un sito web moderno e raffinato che presenta una selezione premium di panettoni prodotti con lievitazione naturale di 48 ore.
+Landing page elegante per panettoni artigianali da Mattia Spadavecchia. Un sito web moderno e raffinato che presenta una selezione premium di panettoni prodotti con lievitazione naturale di 48 ore. Fatta da Jerry.
 
 ## 🎨 Caratteristiche
 
@@ -192,8 +192,5 @@ Questo progetto è privato e riservato.
 
 ## 👨‍💻 Sviluppatore
 
-Sviluppato per Mattia Spadavecchia - Panettoni Artigianali
-
----
-
-**Nota**: Questo progetto è stato inizialmente creato con [Lovable](https://lovable.dev) e poi personalizzato ulteriormente.
+Sviluppato per Mattia Spadavecchia da Gennaro Panunzio. - Panettoni Artigianali
+Linkedin Gennaro Panunzio: https://www.linkedin.com/in/gennaro-panunzio-940236381/
