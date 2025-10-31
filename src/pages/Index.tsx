@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Instagram, MessageCircle, Globe } from "lucide-react";
+import { Instagram, MessageCircle } from "lucide-react";
 import PanettonCard from "@/components/PanettonCard";
 import PanettonDialog from "@/components/PanettonDialog";
 import { Button } from "@/components/ui/button";
@@ -299,7 +299,7 @@ const Index = () => {
                 window.open(href, '_blank');
               }}
             >
-              <Globe className="mr-2 h-4 w-4" />
+              <span className="mr-2 text-lg">✨</span>
               Clicca per creare il tuo sito web
             </Button>
           </div>
