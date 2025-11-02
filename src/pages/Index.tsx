@@ -280,7 +280,7 @@ const Index = () => {
               className="mt-4 bg-gradient-to-r from-green-500/40 to-emerald-500/40 hover:from-green-500/50 hover:to-emerald-500/50 text-foreground/90 border border-border/50 font-elegant text-lg px-8 py-6 rounded-full shadow-[var(--shadow-elegant)] transition-all duration-300 hover:scale-[1.02]"
               onClick={() => {
                 const msg = 'Ciao, vorrei informazioni sui panettoni. Grazie mille';
-                const href = `https://wa.me/4549999617?text=${encodeURIComponent(msg)}`;
+                const href = `https://wa.me/393896667388?text=${encodeURIComponent(msg)}`;
                 window.open(href, '_blank');
               }}
             >
