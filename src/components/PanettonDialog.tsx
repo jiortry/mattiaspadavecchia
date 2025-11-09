@@ -39,13 +39,19 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
       <DialogContent className="w-[92vw] sm:max-w-[560px] md:max-w-[640px] max-h-[88vh] md:max-h-[90vh] overflow-y-auto bg-card border-border/50 p-6 md:p-8 rounded-xl scrollbar-elegant">
         <DialogHeader className="space-y-4">
           <DialogTitle className="text-3xl font-elegant text-foreground">
-            {panettone.name} - 1 kg
+            {panettone.name}
           </DialogTitle>
           <DialogDescription className="text-base text-muted-foreground italic">
             {panettone.description}
           </DialogDescription>
         </DialogHeader>
         <div className="mt-6 space-y-6">
+          {/* Peso del panettone */}
+          <div className="text-center">
+            <span className="text-foreground font-elegant font-semibold text-lg">
+              1 kg
+            </span>
+          </div>
           {/* Prezzo e Ordina sulla stessa riga */}
           {(panettone.prices?.kg1 || panettone.price) && (
             <button
