@@ -38,8 +38,11 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[92vw] sm:max-w-[560px] md:max-w-[640px] max-h-[88vh] md:max-h-[90vh] overflow-y-auto bg-card border-border/50 p-6 md:p-8 rounded-xl scrollbar-elegant">
         <DialogHeader className="space-y-4">
-          <DialogTitle className="text-3xl font-elegant text-foreground">
+          <DialogTitle className="text-3xl font-elegant text-foreground flex items-center gap-3">
             {panettone.name}
+            <span className="bg-orange-500/20 border border-orange-400/50 rounded-lg px-3 py-1 text-orange-700 font-elegant font-bold text-lg">
+              1 kg
+            </span>
           </DialogTitle>
           <DialogDescription className="text-base text-muted-foreground italic">
             {panettone.description}
@@ -51,21 +54,14 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
             <button
               className="w-full rounded-xl border-2 border-orange-400/80 bg-orange-500/10 hover:bg-orange-500/20 px-6 py-5 flex items-center justify-between transition-all duration-200 cursor-pointer shadow-[0_2px_10px_rgba(255,149,0,0.15)] hover:shadow-[0_4px_15px_rgba(255,149,0,0.25)]"
               onClick={() => {
-                const msg = panettone.prices?.kg1 
-                  ? `Vorrei prenotare un panettone ${panettone.name} da 1 kg. Grazie mille`
-                  : `Vorrei prenotare un panettone ${panettone.name}. Grazie mille`;
+                const msg = `Vorrei prenotare un panettone ${panettone.name}. Grazie mille`;
                 const href = `https://wa.me/393896667388?text=${encodeURIComponent(msg)}`;
                 window.open(href, "_blank");
               }}
             >
-              <div className="flex items-center gap-4">
-                <span className="bg-orange-500/20 border border-orange-400/50 rounded-lg px-3 py-1.5 text-orange-700 font-elegant font-bold text-base">
-                  1 kg
-                </span>
-                <span className="text-orange-600 font-elegant font-bold text-2xl">
-                  {panettone.prices?.kg1 || panettone.price}
-                </span>
-              </div>
+              <span className="text-orange-600 font-elegant font-bold text-2xl">
+                {panettone.prices?.kg1 || panettone.price}
+              </span>
               <span className="text-orange-700 font-elegant font-bold text-base flex items-center gap-2">
                 Ordina
                 <span className="text-xl">→</span>
