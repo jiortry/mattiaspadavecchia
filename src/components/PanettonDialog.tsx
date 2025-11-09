@@ -46,62 +46,28 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
           </DialogDescription>
         </DialogHeader>
         <div className="mt-6 space-y-6">
-          {/* Mini tabella prezzi elegante */}
-          <div className="rounded-xl border border-border/40 bg-muted/10 overflow-hidden">
-            <table className="w-full text-sm">
-              <tbody>
-                {panettone.prices?.kg1 && (
-                  <tr>
-                    <td className="px-4 py-3 text-muted-foreground">1 kg</td>
-                    <td className="px-2 py-2 text-right">
-                      <button
-                        className="inline-flex items-center gap-2 rounded-full border border-orange-400/70 bg-orange-500/5 hover:bg-orange-500/10 text-orange-600 px-3 py-1.5 font-elegant font-bold shadow-sm transition-colors"
-                        onClick={() => {
-                          const msg = `Vorrei prenotare un panettone ${panettone.name} da 1 kg. Grazie mille`;
-                          const href = `https://wa.me/393896667388?text=${encodeURIComponent(msg)}`;
-                          window.open(href, "_blank");
-                        }}
-                      >
-                        {panettone.prices.kg1}
-                      </button>
-                    </td>
-                  </tr>
-                )}
-                {!panettone.prices && panettone.price && (
-                  <tr>
-                    <td className="px-4 py-3 text-muted-foreground">Prezzo</td>
-                    <td className="px-2 py-2 text-right">
-                      <button
-                        className="inline-flex items-center gap-2 rounded-full border border-orange-400/70 bg-orange-500/5 hover:bg-orange-500/10 text-orange-600 px-3 py-1.5 font-elegant font-bold shadow-sm transition-colors"
-                        onClick={() => {
-                          const msg = `Vorrei prenotare un panettone ${panettone.name}. Grazie mille`;
-                          const href = `https://wa.me/393896667388?text=${encodeURIComponent(msg)}`;
-                          window.open(href, "_blank");
-                        }}
-                      >
-                        {panettone.price}
-                      </button>
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-
-          {/* CTA WhatsApp */}
-          {panettone.prices?.kg1 && (
-            <div className="flex items-center gap-3">
-              <button
-                className="rounded-full border border-orange-400/80 bg-orange-500/10 hover:bg-orange-500/15 text-orange-700 px-4 py-2 text-sm font-elegant font-bold shadow-[0_2px_10px_rgba(255,149,0,0.15)] transition-colors"
-                onClick={() => {
-                  const msg = `Vorrei prenotare un panettone ${panettone.name} da 1 kg. Grazie mille`;
-                  const href = `https://wa.me/393896667388?text=${encodeURIComponent(msg)}`;
-                  window.open(href, "_blank");
-                }}
-              >
-                Ordina 1kg
-              </button>
-            </div>
+          {/* Prezzo e Ordina sulla stessa riga */}
+          {(panettone.prices?.kg1 || panettone.price) && (
+            <button
+              className="w-full rounded-xl border border-orange-400/70 bg-orange-500/5 hover:bg-orange-500/10 px-4 py-4 flex items-center justify-between transition-colors cursor-pointer"
+              onClick={() => {
+                const msg = panettone.prices?.kg1 
+                  ? `Vorrei prenotare un panettone ${panettone.name} da 1 kg. Grazie mille`
+                  : `Vorrei prenotare un panettone ${panettone.name}. Grazie mille`;
+                const href = `https://wa.me/393896667388?text=${encodeURIComponent(msg)}`;
+                window.open(href, "_blank");
+              }}
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-muted-foreground text-sm">1 kg</span>
+                <span className="text-orange-600 font-elegant font-bold text-lg">
+                  {panettone.prices?.kg1 || panettone.price}
+                </span>
+              </div>
+              <span className="text-orange-700 font-elegant font-bold text-sm">
+                Ordina →
+              </span>
+            </button>
           )}
 
           <div>
