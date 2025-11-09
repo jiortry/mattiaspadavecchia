@@ -51,7 +51,7 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
             <table className="w-full text-sm">
               <tbody>
                 {panettone.prices?.kg1 && (
-                  <tr className="border-b border-border/30">
+                  <tr>
                     <td className="px-4 py-3 text-muted-foreground">1 kg</td>
                     <td className="px-2 py-2 text-right">
                       <button
@@ -63,23 +63,6 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
                         }}
                       >
                         {panettone.prices.kg1}
-                      </button>
-                    </td>
-                  </tr>
-                )}
-                {panettone.prices?.half && (
-                  <tr>
-                    <td className="px-4 py-3 text-muted-foreground">Mezzo kg</td>
-                    <td className="px-2 py-2 text-right">
-                      <button
-                        className="inline-flex items-center gap-2 rounded-full border border-orange-400/70 bg-orange-500/5 hover:bg-orange-500/10 text-orange-600 px-3 py-1.5 font-elegant font-bold shadow-sm transition-colors"
-                        onClick={() => {
-                          const msg = `Vorrei prenotare un panettone ${panettone.name} da Mezzo Kg. Grazie mille`;
-                          const href = `https://wa.me/393896667388?text=${encodeURIComponent(msg)}`;
-                          window.open(href, "_blank");
-                        }}
-                      >
-                        {panettone.prices.half}
                       </button>
                     </td>
                   </tr>
@@ -106,8 +89,8 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
           </div>
 
           {/* CTA WhatsApp */}
-          <div className="flex items-center gap-3">
-            {panettone.prices?.kg1 && (
+          {panettone.prices?.kg1 && (
+            <div className="flex items-center gap-3">
               <button
                 className="rounded-full border border-orange-400/80 bg-orange-500/10 hover:bg-orange-500/15 text-orange-700 px-4 py-2 text-sm font-elegant font-bold shadow-[0_2px_10px_rgba(255,149,0,0.15)] transition-colors"
                 onClick={() => {
@@ -118,20 +101,8 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
               >
                 Ordina 1kg
               </button>
-            )}
-            {panettone.prices?.half && (
-              <button
-                className="rounded-full border border-orange-400/80 bg-orange-500/10 hover:bg-orange-500/15 text-orange-700 px-4 py-2 text-sm font-elegant font-bold shadow-[0_2px_10px_rgba(255,149,0,0.15)] transition-colors"
-                onClick={() => {
-                  const msg = `Vorrei prenotare un panettone ${panettone.name} da Mezzo Kg. Grazie mille`;
-                  const href = `https://wa.me/393896667388?text=${encodeURIComponent(msg)}`;
-                  window.open(href, "_blank");
-                }}
-              >
-                Ordina Mezzo Kg
-              </button>
-            )}
-          </div>
+            </div>
+          )}
 
           <div>
             <h4 className="text-lg font-elegant font-semibold text-foreground mb-3">

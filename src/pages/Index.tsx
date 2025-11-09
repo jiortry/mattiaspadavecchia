@@ -28,7 +28,7 @@ interface Panettone {
 const panettoni: Panettone[] = [
   {
     name: "Pistacchio",
-    prices: { kg1: "€48,00", half: "€28,00" },
+    prices: { kg1: "€45,00" },
     ingredients: [
       "Farina di frumento tenero tipo \"0\"",
       "Burro da panna",
@@ -58,7 +58,7 @@ const panettoni: Panettone[] = [
   },
   {
     name: "Tradizionale",
-    prices: { kg1: "€35,00", half: "€25,00" },
+    prices: { kg1: "€35,00" },
     ingredients: [
       "Farina di frumento tenero tipo \"0\"",
       "Burro da panna",
@@ -85,7 +85,7 @@ const panettoni: Panettone[] = [
   },
   {
     name: "Cioccolato Bianco e Limone",
-    prices: { kg1: "€38,00", half: "€26,00" },
+    prices: { kg1: "€38,00" },
     ingredients: [
       "Farina di frumento tenero tipo \"0\"",
       "Burro da panna",
@@ -114,7 +114,7 @@ const panettoni: Panettone[] = [
   },
   {
     name: "Caffè e Arancia",
-    prices: { kg1: "€35,00", half: "€25,00" },
+    prices: { kg1: "€35,00" },
     ingredients: [
       "Farina di frumento tenero tipo \"0\"",
       "Burro da panna",
@@ -146,7 +146,7 @@ const panettoni: Panettone[] = [
   },
   {
     name: "Cioccolato Fondente",
-    prices: { kg1: "€38,00", half: "€26,00" },
+    prices: { kg1: "€38,00" },
     ingredients: [
       "Farina di frumento tenero tipo \"0\"",
       "Burro da panna",
@@ -175,7 +175,7 @@ const panettoni: Panettone[] = [
   },
   {
     name: "Arancia, Cioccolato Fondente e Caramello",
-    prices: { kg1: "€38,00", half: "€28,00" },
+    prices: { kg1: "€38,00" },
     ingredients: [
       "Farina di frumento tenero tipo \"0\"",
       "Burro da panna",
