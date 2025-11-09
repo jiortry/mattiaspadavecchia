@@ -49,7 +49,7 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
           {/* Prezzo e Ordina sulla stessa riga */}
           {(panettone.prices?.kg1 || panettone.price) && (
             <button
-              className="w-full rounded-xl border border-orange-400/70 bg-orange-500/5 hover:bg-orange-500/10 px-4 py-4 flex items-center justify-between transition-colors cursor-pointer"
+              className="w-full rounded-xl border-2 border-orange-400/80 bg-orange-500/10 hover:bg-orange-500/20 px-6 py-5 flex items-center justify-between transition-all duration-200 cursor-pointer shadow-[0_2px_10px_rgba(255,149,0,0.15)] hover:shadow-[0_4px_15px_rgba(255,149,0,0.25)]"
               onClick={() => {
                 const msg = panettone.prices?.kg1 
                   ? `Vorrei prenotare un panettone ${panettone.name} da 1 kg. Grazie mille`
@@ -58,14 +58,17 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
                 window.open(href, "_blank");
               }}
             >
-              <div className="flex items-center gap-3">
-                <span className="text-muted-foreground text-sm">1 kg</span>
-                <span className="text-orange-600 font-elegant font-bold text-lg">
+              <div className="flex items-center gap-4">
+                <span className="bg-orange-500/20 border border-orange-400/50 rounded-lg px-3 py-1.5 text-orange-700 font-elegant font-bold text-base">
+                  1 kg
+                </span>
+                <span className="text-orange-600 font-elegant font-bold text-2xl">
                   {panettone.prices?.kg1 || panettone.price}
                 </span>
               </div>
-              <span className="text-orange-700 font-elegant font-bold text-sm">
-                Ordina →
+              <span className="text-orange-700 font-elegant font-bold text-base flex items-center gap-2">
+                Ordina
+                <span className="text-xl">→</span>
               </span>
             </button>
           )}
