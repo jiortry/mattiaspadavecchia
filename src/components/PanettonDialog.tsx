@@ -39,7 +39,7 @@ const PanettonDialog = ({ panettone, open, onOpenChange }: PanettonDialogProps) 
       <DialogContent className="w-[92vw] sm:max-w-[560px] md:max-w-[640px] max-h-[88vh] md:max-h-[90vh] overflow-y-auto bg-card border-border/50 p-6 md:p-8 rounded-xl scrollbar-elegant">
         <DialogHeader className="space-y-4">
           <DialogTitle className="text-3xl font-elegant text-foreground">
-            {panettone.name} 1 kg
+            {panettone.name} - 1 kg
           </DialogTitle>
           <DialogDescription className="text-base text-muted-foreground italic">
             {panettone.description}
